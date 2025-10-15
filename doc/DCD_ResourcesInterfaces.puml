@@ -1,0 +1,78 @@
+@startuml
+
+
+top to bottom direction
+
+
+interface resources.interfaces.daoFactory.AbstractDAOFactory << interface >> {
+  + createRelacioUsuariAdquisicioJocDAO(): RelacioUsuariAdquisicioJocDAO
+  + createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO(): RelacioSessioJocAssolimentJocEspecAssolimentJocDAO
+  + createRelacioUsuariSessioJocAdquisicioDAO(): RelacioUsuariAdquisicioSessioJocDAO
+  + createUsuariDAO(): UsuariDAO
+  + createEspecAssolimentDAO(): EspecAssolimentDAO
+  + createJocDAO(): JocDAO
+}
+interface resources.interfaces.DAO<T> << interface >> {
+  + delete(T): boolean
+  + getAll(): List<T>
+  + add(T): boolean
+}
+interface resources.interfaces.DAOEntity<T> << interface >> {
+  + getById(String[]): Optional<T>
+  + update(T): boolean
+}
+class resources.DataService {
+  - usuariDAO: UsuariDAO
+  - relacioUsuariAdquisicioSessioJocDAO: RelacioUsuariAdquisicioSessioJocDAO
+  - relacioSessionsJocAssolimentsJocEspecAssolimentsJoc: RelacioSessioJocAssolimentJocEspecAssolimentJocDAO
+  - jocDAO: JocDAO
+  - relacioUsuariAdquisicioJocDAO: RelacioUsuariAdquisicioJocDAO
+  - especAssolimentDAO: EspecAssolimentDAO
+  + loadDataInto(CarteraUsuaris, CatalegJocs): void
+  - relacionarUsuarisAdquisicionsSessionsJoc(CarteraUsuaris): void
+  - relacionarSessionsJocAssolimentsJocEspecAssolimentsJoc(CarteraUsuaris, CatalegJocs): void
+  + loadUsuarisInto(CarteraUsuaris): void
+  - relacionarUsuarisAdquisicionsJocs(CarteraUsuaris, CatalegJocs): void
+  + initCarteraUsuaris(CarteraUsuaris): void
+  + initCatalegJocs(CatalegJocs): void
+  + loadJocsInto(CatalegJocs): void
+  - initEspecAssoliments(CatalegJocs): void
+}
+interface resources.interfaces.entities.EspecAssolimentDAO << interface >> {
+  + getAll(): List<EspecAssolimentJoc>
+  + add(EspecAssolimentJoc): boolean
+  + delete(EspecAssolimentJoc): boolean
+}
+interface resources.interfaces.entities.JocDAO << interface >> {
+  + getAll(): List<Joc>
+}
+interface resources.interfaces.relations.RelacioSessioJocAssolimentJocEspecAssolimentJocDAO << interface >> {
+  + getAll(): List<Sextet<String, String, LocalDate, LocalDateTime, String, LocalDateTime>>
+}
+interface resources.interfaces.relations.RelacioUsuariAdquisicioJocDAO << interface >> {
+  + getAll(): List<Quintet<String, String, LocalDate, Double, String>>
+}
+interface resources.interfaces.relations.RelacioUsuariAdquisicioSessioJocDAO << interface >> {
+  + getAll(): List<Sextet<String, String, LocalDate, LocalDateTime, LocalDateTime, Integer>>
+}
+interface resources.interfaces.entities.UsuariDAO << interface >> {
+  + getAll(): List<Usuari>
+}
+
+AbstractDAOFactory                                  -[#595959,dashed]->  EspecAssolimentDAO                                 
+AbstractDAOFactory                                  -[#595959,dashed]->  JocDAO                                             
+AbstractDAOFactory                                  -[#595959,dashed]->  RelacioSessioJocAssolimentJocEspecAssolimentJocDAO 
+AbstractDAOFactory                                  -[#595959,dashed]->  RelacioUsuariAdquisicioJocDAO                      
+AbstractDAOFactory                                  -[#595959,dashed]->  RelacioUsuariAdquisicioSessioJocDAO                
+AbstractDAOFactory                                  -[#595959,dashed]->  UsuariDAO                                          
+DAOEntity                                           -[#008200,plain]left-|>  DAO
+DataService                                         -[#595959,dashed]right->  AbstractDAOFactory
+DataService                                        "1" -[#595959,plain]down-> "\n1" entities
+DataService                                        "1" -[#595959,plain]-> "\n1" relations
+EspecAssolimentDAO                                  -[#008200,plain]-^  DAOEntity   : implements
+JocDAO                                              -[#008200,plain]-^  DAOEntity                                          
+RelacioSessioJocAssolimentJocEspecAssolimentJocDAO  -[#008200,plain]-^  DAO                                                
+RelacioUsuariAdquisicioJocDAO                       -[#008200,plain]-^  DAO                                                
+RelacioUsuariAdquisicioSessioJocDAO                 -[#008200,plain]-^  DAO                                                
+UsuariDAO                                           -[#008200,plain]-^  DAOEntity                                          
+@enduml

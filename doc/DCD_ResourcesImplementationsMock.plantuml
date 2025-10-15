@@ -1,0 +1,83 @@
+@startuml
+
+
+top to bottom direction
+
+class resources.implementations.mock.entities.EspecAssolimentMockDAO {
+  - specAssoliments: Map<Parell<String, String>, EspecAssolimentJoc>
+  + update(EspecAssolimentJoc): boolean
+  + add(EspecAssolimentJoc): boolean
+  + getAll(): List<EspecAssolimentJoc>
+  - addSpecAssoliment(String, String, Double): void
+  + delete(EspecAssolimentJoc): boolean
+  + getById(String[]): Optional<EspecAssolimentJoc>
+}
+class resources.implementations.mock.entities.JocMockDAO {
+  - jocs: Map<String, Joc>
+  - formatter: DateTimeFormatter
+  - addJocDisponible(String, String, String, String, String, String): void
+  + getAll(): List<Joc>
+  + delete(Joc): boolean
+  + update(Joc): boolean
+  - addJocAnunciat(String, String, String, String, String): void
+  - addJocRetirat(String, String, String, String, String, String, String): void
+  + add(Joc): boolean
+  + getById(String[]): Optional<Joc>
+}
+class resources.implementations.mock.daofactory.MockDAOFactory {
+  + createUsuariDAO(): UsuariDAO
+  + createRelacioUsuariAdquisicioJocDAO(): RelacioUsuariAdquisicioJocDAO
+  + createRelacioUsuariSessioJocAdquisicioDAO(): RelacioUsuariAdquisicioSessioJocDAO
+  + createEspecAssolimentDAO(): EspecAssolimentDAO
+  + createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO(): RelacioSessioJocAssolimentJocEspecAssolimentJocDAO
+  + createJocDAO(): JocDAO
+}
+class resources.implementations.mock.relations.RelacioMockDAO<T> {
+  # relacions: List<T>
+  + delete(T): boolean
+  + add(T): boolean
+  + getAll(): List<T>
+}
+class resources.implementations.mock.relations.RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO {
+  - addRelacio(String, String, String, String, String, String): void
+}
+class resources.implementations.mock.relations.RelacioUsuariAdquisicioJocMockDAO {
+  - addRelacio(String, String, String, String, String): void
+}
+class resources.implementations.mock.relations.RelacioUsuariAdquisicioSessioJocMockDAO {
+  - addRelacio(String, String, String, String, String, Integer): void
+}
+class resources.implementations.mock.entities.UsuariMockDAO {
+  ~ usuaris: Map<String, Usuari>
+  + update(Usuari): boolean
+  + getAll(): List<Usuari>
+  + getById(String[]): Optional<Usuari>
+  + delete(Usuari): boolean
+  + add(Usuari): boolean
+  - addUsuari(String, String, String, String, String): void
+}
+interface resources.interfaces.daoFactory.AbstractDAOFactory << interface >> {
+  + createRelacioUsuariAdquisicioJocDAO(): RelacioUsuariAdquisicioJocDAO
+  + createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO(): RelacioSessioJocAssolimentJocEspecAssolimentJocDAO
+  + createRelacioUsuariSessioJocAdquisicioDAO(): RelacioUsuariAdquisicioSessioJocDAO
+  + createUsuariDAO(): UsuariDAO
+  + createEspecAssolimentDAO(): EspecAssolimentDAO
+  + createJocDAO(): JocDAO
+}
+interface resources.interfaces.DAO<T> << interface >> {
+  + delete(T): boolean
+  + getAll(): List<T>
+  + add(T): boolean
+}
+resources.interfaces.daoFactory.AbstractDAOFactory  <|.right.  MockDAOFactory: implements
+MockDAOFactory                                          -[#595959,dashed]->  EspecAssolimentMockDAO                                 : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  JocMockDAO                                             : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioUsuariAdquisicioJocMockDAO                      : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioUsuariAdquisicioSessioJocMockDAO                : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  UsuariMockDAO                                          : "«create»"
+RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO  -[#000082,plain]up-^  RelacioMockDAO
+RelacioUsuariAdquisicioJocMockDAO                       -[#000082,plain]up-^  RelacioMockDAO
+RelacioUsuariAdquisicioSessioJocMockDAO                 -[#000082,plain]up-^  RelacioMockDAO
+RelacioMockDAO .up.|> resources.interfaces.DAO: implements
+@enduml

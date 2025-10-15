@@ -1,0 +1,81 @@
+@startuml
+top to bottom direction
+
+class Adquisicio {
+  - tempsJugat: Time
+  - data: LocalDate
+}
+
+class AssolimentJoc {
+  - dataHora: LocalDateTime
+}
+
+class CarteraUsuaris {
+}
+
+class CatalegJocs {
+}
+
+enum EstatSessioJoc {
+        ACTIVA,
+        PAUSADA,
+        FINALITZADA
+    }
+
+enum EstatJoc {
+  ANUNCIAT,
+  DISPONIBLE,
+  RETIRAT
+  }
+
+class EspecAssolimentJoc {
+  - titol: String
+  - percentatgeUsuarisCompletat: Double
+}
+
+class Joc {
+  - dataRetirada: LocalDate
+  - generes: List<String>
+  - titol: String
+  - dataAnunci: LocalDate
+  - desenvolupadores: List<String>
+  - dataLlancament: LocalDate
+  - distribuidores: List<String>
+}
+class Preu {
+  - quantitat: Double
+  - moneda: String
+}
+
+
+class SessioJoc {
+  - estat: Estat
+  - dataInici: LocalDateTime
+  - dataFi: LocalDateTime
+}
+
+class Usuari {
+  - dataRegistre: LocalDate
+  - nomUsuari: String
+  - dataNaixement: LocalDate
+  - email: String
+  - contrasenya: String
+
+}
+
+
+
+class node4 as "package  model.excepcions" << package >>
+
+Adquisicio         "*" *-[#595959,plain]-> "1" Joc: "esDe"
+Adquisicio         "*" -[#595959,plain]right--> "  usa\n      1" Preu
+Adquisicio         "1" -[#595959,plain]-> "esPotJugar\n\n         *" SessioJoc
+AssolimentJoc      "*" -[#595959,plain]-> "1" EspecAssolimentJoc: esDescrita
+CarteraUsuaris     "1" *-[#595959,plain]-> "té\n*" Usuari
+CatalegJocs        "1" *-[#595959,plain]-> "conté \n*" Joc
+Joc                "1" -[#595959,plain]-> "*" EspecAssolimentJoc: "té       "
+Joc               "*" -[#595959,plain]right-> "1" EstatJoc: "estàEn       "
+SessioJoc          "1" -[#595959,plain]-> "assoleix\n       *" AssolimentJoc
+SessioJoc         "*" -[#595959,plain]-> "estàEn\n       1" EstatSessioJoc
+Usuari             "1" -[#595959,plain]-> "*" Adquisicio: adquireix
+@enduml

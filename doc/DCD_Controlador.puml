@@ -1,0 +1,53 @@
+@startuml
+
+
+top to bottom direction
+skinparam linetype ortho
+
+class controlador.Controlador {
+  - catalegJocs: CatalegJocs
+  - dataService: IDataService
+  - carteraUsuaris: CarteraUsuaris
+  + visualitzarLlistaJocsAdquiritsPerUsuari(String): String
+  + loguejarUsuari(String, String): String
+  + visualitzarLlistaJocsCataleg(): String
+  + loadUsuariDataFromResources(): void
+  + veureDetallsJoc(String): String
+  + loadJocDataFromResources(): void
+  + loadDataFromResources(): void
+  + registrarUsuari(String, String, String, String): String
+}
+interface controlador.interfaces.IDataService << interface >> {
+  + loadJocsInto(CatalegJocs): void
+  + loadUsuarisInto(CarteraUsuaris): void
+  + loadDataInto(CarteraUsuaris, CatalegJocs): void
+}
+enum controlador.MessagesCAT << enumeration >> {
+  + JocNotFoundException: 
+  + UsernameAlreadyRegisteredException: 
+  + PasswordHasLessThan8CharactersException: 
+  + EmptyBirthdateException: 
+  + BadlyFormattedEmailException: 
+  + IncorrectPasswordException: 
+  + SuccessfulLogin: 
+  + EmailAlreadyRegisteredException: 
+  - message: String
+  + SuccessfulUserRegistration: 
+  + EmptyEmailException: 
+  + EmptyPasswordException: 
+  + PasswordNeedsAtLeastOneSymbolException: 
+  + EmptyCatalegException: 
+  + EmailNotRegisteredException: 
+  + PasswordNeedsAtLeastOneNumberException: 
+  + PasswordNeedsAtLeastOneLetterException: 
+  + EmptyUsernameException: 
+  + InvalidBirthdateFormatException: 
+  + getMessage(): String
+  + values(): MessagesCAT[]
+  + valueOf(String): MessagesCAT
+  + translate(Exception): String
+}
+
+Controlador  "1" -[#595959,plain]-> "uses\n1" IDataService
+Controlador   --[#595959,dashed]right-->  MessagesCAT: uses
+@enduml
