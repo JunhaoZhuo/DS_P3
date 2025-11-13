@@ -134,7 +134,7 @@ public class Controlador {
     }
 
     /*
-     * Metodes privats de comprovació i processament
+     * Metodes privats de comprovació i processament.
      */
 
 

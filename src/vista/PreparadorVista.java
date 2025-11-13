@@ -16,5 +16,5 @@ public class PreparadorVista {
         return "Llista de jocs del catàleg:\n" + String.join("\n", titols);
     }
 
-    // Aquí aniran els altres mètodes de formatació (per US5 i US6)
+
 }
