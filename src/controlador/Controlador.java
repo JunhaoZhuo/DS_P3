@@ -10,7 +10,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import vista.FormatadorVista;
+import vista.PreparadorVista;
 
 public class Controlador {
     private final IDataService dataService;
@@ -88,7 +88,7 @@ public class Controlador {
         try {
 
             List<Joc> jocs = catalegJocs.getJocsOrdenatsPerNom();
-            return FormatadorVista.formatarLlistaJocsCataleg(jocs);
+            return PreparadorVista.prepararLlistaJocsCataleg(jocs);
         } catch (Exception e) {
             return MessagesCAT.translate(e);
         }
