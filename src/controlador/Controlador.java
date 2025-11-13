@@ -6,11 +6,11 @@ import model.excepcions.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import vista.PreparadorVista;
+
 
 public class Controlador {
     private final IDataService dataService;
@@ -107,25 +107,7 @@ public class Controlador {
     public String veureDetallsJoc(String titol) {
         try {
             Joc joc = catalegJocs.findByTitol(titol);
-            String titolFormatat = String.format("\"%s\"", joc.getTitol());
-            String generesFormatat = String.join(", ", joc.getGeneres());
-            String desenvolupadoresFormatat = String.join(", ", joc.getDesenvolupadores());
-            String distribuidoresFormatat = String.join(", ", joc.getDistribuidores());
-            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            String dataAnunci = joc.getDataAnunci() != null ? joc.getDataAnunci().format(pattern) : "N/A";
-            String dataLlancament = joc.getDataLlancament() != null ? joc.getDataLlancament().format(pattern) : "N/A";
-            String dataRetirada = joc.getDataRetirada() != null ? joc.getDataRetirada().format(pattern) : "N/A";
-
-            StringBuilder details = new StringBuilder();
-            details.append("Títol: ").append(titolFormatat).append("\n")
-                    .append("Gènere(s): ").append(generesFormatat).append("\n")
-                    .append("Desenvolupadora(es): ").append(desenvolupadoresFormatat).append("\n")
-                    .append("Distribuïdora(es): ").append(distribuidoresFormatat).append("\n")
-                    .append("Data d'anunci: ").append(dataAnunci).append("\n")
-                    .append("Data de llançament: ").append(dataLlancament).append("\n")
-                    .append("Data de retirada: ").append(dataRetirada).append("\n")
-                    .append("Estat: ").append(joc.getEstat());
-            return details.toString();
+            return PreparadorVista.prepararDetallsJoc(joc);
         } catch (Exception e) {
             return MessagesCAT.translate(e);
         }
