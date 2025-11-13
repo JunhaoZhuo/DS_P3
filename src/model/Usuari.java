@@ -52,6 +52,14 @@ public class Usuari {
         return nomUsuari;
     }
 
+    /*
+    CANVIS US2
+     */
+    public boolean comprovarContrasenya(String contrasenya) {
+        return this.contrasenya.equals(contrasenya);
+    }
+
+
     public List<Adquisicio> getAdquisicions() {
         return adquisicions;
     }
@@ -77,6 +85,9 @@ public class Usuari {
     /*
      * Metodes privats de comprovació i processament
      */
+    /*
+    * CANVIS US1
+    * */
     private void comprovarCorreuEsValid(String email) throws Exception {
         if (email == null || email.isEmpty()) {
             throw new EmptyEmailException();

@@ -74,7 +74,7 @@ public class Controlador {
                 throw new EmailNotRegisteredException();
             }
 
-            if (!usuari.getContrasenya().equals(contrasenya)) {
+            if (!usuari.comprovarContrasenya(contrasenya)) {
                 throw new IncorrectPasswordException();
             }
             return MessagesCAT.SuccessfulLogin.getMessage();
