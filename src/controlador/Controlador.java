@@ -97,10 +97,8 @@ public class Controlador {
     public String visualitzarLlistaJocsAdquiritsPerUsuari(String email) {
         try {
             List<Adquisicio> adquisicions = carteraUsuaris.getAdquisicionsDeUsuariOrdenadesPerNom(email);
-            List<String> titols = adquisicions.stream()
-                    .map(Adquisicio::getTitolJoc)
-                    .collect(Collectors.toList());
-            return "Llista de jocs adquirits per l'usuari:\n" + String.join("\n", titols);
+            // Delegació de la preparació (aplicant GRASP)
+            return PreparadorVista.prepararLlistaAdquisicions(adquisicions);
         } catch (Exception e) {
             return MessagesCAT.translate(e);
         }
