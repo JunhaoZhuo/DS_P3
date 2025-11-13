@@ -10,6 +10,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import vista.FormatadorVista;
 
 public class Controlador {
     private final IDataService dataService;
@@ -85,11 +86,9 @@ public class Controlador {
 
     public String visualitzarLlistaJocsCataleg() {
         try {
+
             List<Joc> jocs = catalegJocs.getJocsOrdenatsPerNom();
-            List<String> titols = jocs.stream()
-                    .map(Joc::getTitol)
-                    .collect(Collectors.toList());
-            return "Llista de jocs del catàleg:\n" + String.join("\n", titols);
+            return FormatadorVista.formatarLlistaJocsCataleg(jocs);
         } catch (Exception e) {
             return MessagesCAT.translate(e);
         }
