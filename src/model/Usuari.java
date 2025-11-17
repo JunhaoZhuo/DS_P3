@@ -140,4 +140,15 @@ public class Usuari {
         return false;
     }
 
+    // Util pel US8, trobar adquisició per títol de joc
+    public Adquisicio findAdquisicioByTitol(String titolJoc) {
+        if (adquisicions != null) {
+            for (Adquisicio adquisicio : adquisicions) {
+                if (adquisicio.getJoc().getTitol().equals(titolJoc)) {
+                    return adquisicio;
+                }
+            }
+        }
+        return null;
+    }
 }

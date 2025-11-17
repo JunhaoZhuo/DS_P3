@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import vista.PreparadorVista;
+import java.util.Map;
+
 
 
 public class Controlador {
@@ -169,6 +171,55 @@ public class Controlador {
             usuari.addAdquisicio(novaAdquisicio);
 
             return MessagesCAT.SuccessfulAdquisicio.getMessage();
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
+    // US8 - Revisar Joc
+    public String revisarJoc(String email, String titolJoc, Map<String, Integer> puntuacions) {
+        try {
+            // 1. Validar Usuari (Expert: CarteraUsuaris)
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) {
+                throw new EmailNotRegisteredException();
+            }
+
+            // 2. Trobar Adquisició (Expert: Usuari)
+            Adquisicio adquisicio = usuari.findAdquisicioByTitol(titolJoc);
+            if (adquisicio == null) {
+                throw new UsuariNoTeJocException();
+            }
+
+            // 3. Validar Puntuacions
+            if (!puntuacions.containsKey("Jugabilitat") || !puntuacions.containsKey("Grafics") ||
+                    !puntuacions.containsKey("Historia") || !puntuacions.containsKey("Musica")) {
+                throw new CategoriesRevisioIncomplertesException();
+            }
+
+            for (Integer puntuacio : puntuacions.values()) {
+                if (puntuacio < 0 || puntuacio > 10) {
+                    throw new PuntuacioIncorrectaException();
+                }
+            }
+
+            // 4. Crear Revisió (Creator)
+            Revisio novaRevisio = new Revisio(
+                    puntuacions.get("Jugabilitat"),
+                    puntuacions.get("Grafics"),
+                    puntuacions.get("Historia"),
+                    puntuacions.get("Musica")
+            );
+
+            // 5. Assignar (Expert: Adquisicio) i determinar missatge
+            boolean eraNova = !adquisicio.teRevisio();
+            adquisicio.setRevisio(novaRevisio);
+
+            if (eraNova) {
+                return MessagesCAT.SuccessfulRevisio.getMessage();
+            } else {
+                return MessagesCAT.SuccessfulRevisioUpdate.getMessage();
+            }
 
         } catch (Exception e) {
             return MessagesCAT.translate(e);

@@ -28,6 +28,13 @@ public enum MessagesCAT {
     JocNoDisponibleException("El joc no està disponible per adquirir"),
     JocJaAdquiritException("Ja has adquirit aquest joc"),
     SuccessfulAdquisicio("Joc adquirit correctament"),
+
+    // New messages for reviewing a game US 8
+    UsuariNoTeJocException("No pots revisar un joc que no has adquirit"),
+    PuntuacioIncorrectaException("La puntuació ha d'estar entre 0 i 10"),
+    CategoriesRevisioIncomplertesException("Falten categories per revisar"),
+    SuccessfulRevisio("Revisió afegida correctament"),
+    SuccessfulRevisioUpdate("Revisió actualitzada correctament"),
     ;
 
 

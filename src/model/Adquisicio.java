@@ -12,6 +12,7 @@ public class Adquisicio {
 
     private Time tempsJugat; // derivat
     private List<SessioJoc> sessionsJoc;
+    private Revisio revisio;
 
     public Adquisicio(Joc joc, LocalDate data, Preu preu) {
         this.joc = joc;
@@ -55,5 +56,12 @@ public class Adquisicio {
             }
         }
         return null;
+    }
+    // US8 - Revisar joc
+    public boolean teRevisio() {
+        return this.revisio != null;
+    }
+    public void setRevisio(Revisio revisio) {
+        this.revisio = revisio;
     }
 }
