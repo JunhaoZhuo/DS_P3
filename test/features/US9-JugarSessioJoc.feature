@@ -3,23 +3,19 @@ Feature: Jugar sessió de joc
   Vull jugar una sessió d’un joc adquirit
   Per així passar-me l'estona avorrida
 
-  Scenario Outline: Éxit al jugar sessió d'un joc adquirit
-    Given usuari "<usuari>" registrat
-    When decideixo jugar una sessió del joc "<joc>"
-    Then accedirà a la sessió de joc i el sistema desarà informacions com quin joc, quanta estona i què va aconseguir
-
+  @TA9.a
+  Scenario Outline: Iniciar i finalitzar una sessió d'un joc adquirit
+    Given l'usuari "<email>" ha adquirit el joc "<titolJoc>"
+    When l'usuari "<email>" inicia i finalitza una sessió del joc "<titolJoc>"
+    Then el sistema mostra el missatge "Sessió de joc finalitzada correctament"
     Examples:
-      | usuari | joc             |
-      | "Joan" | "FIFA 24"       |
-      | "Anna" | "Assassin's Creed" |
+      | email            | titolJoc           |
+      | joan@example.com | FIFA 24            |
+      | laia@example.com | Cyberpunk 2077     |
 
-  Scenario Outline: Éxit al jugar sessió d'un joc adquirit fa temps que ara està retirat
-    Given usuari "<usuari>" registrat
-    When decideixo jugar una sessió del joc "<joc>" adquirit fa temps que ara està retirat
-    Then accedirà a la sessió de joc i el sistema desarà informacions com quin joc, quanta estona i què va aconseguir
-
-    Examples:
-      | usuari | joc             |
-      | "Marc" | "Minecraft"     |
-      | "Laia" | "Cyberpunk 2077" |
-
+  @TA9.b
+  Scenario: Intentar jugar un joc no adquirit
+    Given un usuari s'ha registrat amb l'e-mail "anna@example.com" i dades vàlides
+    And un joc disponible anomenat "Assassin's Creed" existeix al catàleg
+    When l'usuari "anna@example.com" inicia i finalitza una sessió del joc "Assassin's Creed"
+    Then el sistema mostra el missatge "No pots jugar a un joc que no has adquirit"

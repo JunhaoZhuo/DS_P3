@@ -35,6 +35,10 @@ public enum MessagesCAT {
     CategoriesRevisioIncomplertesException("Falten categories per revisar"),
     SuccessfulRevisio("Revisió afegida correctament"),
     SuccessfulRevisioUpdate("Revisió actualitzada correctament"),
+
+    // New messages for playing a game US 9
+    UsuariNoTeJocPerJugarException("No pots jugar a un joc que no has adquirit"),
+    SuccessfulSessio("Sessió de joc finalitzada correctament"),
     ;
 
 

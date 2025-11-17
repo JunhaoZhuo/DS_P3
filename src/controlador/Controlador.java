@@ -5,6 +5,7 @@ import model.*;
 import model.excepcions.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Locale;
@@ -220,6 +221,42 @@ public class Controlador {
             } else {
                 return MessagesCAT.SuccessfulRevisioUpdate.getMessage();
             }
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
+    // US9 - Jugar Sessió
+    public String jugarSessio(String email, String titolJoc) {
+        try {
+            // 1. Validar Usuari (Expert: CarteraUsuaris)
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) {
+                throw new EmailNotRegisteredException();
+            }
+
+            // 2. Trobar Adquisició (Expert: Usuari)
+            Adquisicio adquisicio = usuari.findAdquisicioByTitol(titolJoc);
+            if (adquisicio == null) {
+                throw new UsuariNoTeJocPerJugarException();
+            }
+
+            // 3. Crear la Sessió (Creator: SessioJoc)
+            // Simulem una sessió d'1 hora per al test
+            LocalDateTime dataInici = LocalDateTime.now();
+            LocalDateTime dataFi = dataInici.plusHours(1);
+
+            SessioJoc novaSessio = SessioJoc.crearSessioJocFinalitzada(
+                    usuari.getNomUsuari(),
+                    adquisicio.getJoc(),
+                    dataInici,
+                    dataFi
+            );
+
+            // 4. Assignar Sessió (Expert: Adquisicio)
+            adquisicio.afegirSessioJoc(novaSessio);
+
+            return MessagesCAT.SuccessfulSessio.getMessage();
 
         } catch (Exception e) {
             return MessagesCAT.translate(e);
