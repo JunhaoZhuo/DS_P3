@@ -23,6 +23,11 @@ public enum MessagesCAT {
     UsuariSenseAdquisicionsException("L'usuari no ha adquirit cap joc"),
     SuccessfulUserRegistration("Usuari registrat correctament"),
     SuccessfulLogin("Sessió iniciada correctament"),
+
+    // New messages for acquiring a game US 7
+    JocNoDisponibleException("El joc no està disponible per adquirir"),
+    JocJaAdquiritException("Ja has adquirit aquest joc"),
+    SuccessfulAdquisicio("Joc adquirit correctament"),
     ;
 
 

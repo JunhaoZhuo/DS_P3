@@ -129,5 +129,15 @@ public class Usuari {
         }
     }
 
+    // Util pel US7, pel comprovar si un usuari ja té adquirit un joc
+    public boolean teJoc(Joc joc) {
+        if (adquisicions == null) return false;
+        for (Adquisicio adq : adquisicions) {
+            if (adq.getJoc().equals(joc)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

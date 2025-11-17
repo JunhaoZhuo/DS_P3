@@ -46,4 +46,8 @@ public class CatalegJocs {
                 .sorted((joc1, joc2) -> joc1.getTitol().compareToIgnoreCase(joc2.getTitol()))
                 .toList();
     }
+    // Mètode per afegir jocs al catàleg (útil per a tests) US7
+    public void addJoc(Joc joc) {
+        this.jocs.add(joc);
+    }
 }

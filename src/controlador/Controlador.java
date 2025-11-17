@@ -131,4 +131,47 @@ public class Controlador {
             throw new UsernameAlreadyRegisteredException();
         }
     }
+
+    // Getters per a tests US7
+    public CatalegJocs getCatalegJocs() {
+        return catalegJocs;
+    }
+    // US7 - Adquirir Joc
+    public String adquirirJoc(String email, String titolJoc) {
+        try {
+            // 1. Validar Usuari (Expert: CarteraUsuaris)
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) {
+                throw new EmailNotRegisteredException();
+            }
+
+            // 2. Validar Joc (Expert: CatalegJocs)
+            Joc joc = catalegJocs.findByTitol(titolJoc);
+
+            // 3. Comprovar regles de negoci
+            if (usuari.teJoc(joc)) {
+                throw new JocJaAdquiritException();
+            }
+            if (joc.getEstat() != EstatJoc.DISPONIBLE) {
+                throw new JocNoDisponibleException();
+            }
+
+            // 4. Crear Adquisició (Creator: Adquisicio)
+            // Simulem un preu de 0.0 per al test
+            Adquisicio novaAdquisicio = Adquisicio.crearAdquisicio(
+                    joc,
+                    LocalDate.now(),
+                    0.0,
+                    "EUR"
+            );
+
+            // 5. Assignar (Expert: Usuari)
+            usuari.addAdquisicio(novaAdquisicio);
+
+            return MessagesCAT.SuccessfulAdquisicio.getMessage();
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
 }
