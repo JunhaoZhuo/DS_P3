@@ -7,12 +7,9 @@ import model.excepcions.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import vista.PreparadorVista;
-import java.util.Map;
-
 
 
 public class Controlador {
@@ -177,6 +174,7 @@ public class Controlador {
             return MessagesCAT.translate(e);
         }
     }
+
     // US8 - Revisar Joc
     public String revisarJoc(String email, String titolJoc, Map<String, Integer> puntuacions) {
         try {
@@ -226,6 +224,7 @@ public class Controlador {
             return MessagesCAT.translate(e);
         }
     }
+
     // US9 - Jugar Sessió
     public String jugarSessio(String email, String titolJoc) {
         try {
@@ -257,6 +256,64 @@ public class Controlador {
             adquisicio.afegirSessioJoc(novaSessio);
 
             return MessagesCAT.SuccessfulSessio.getMessage();
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
+
+    // US10 - Recomanacions
+    public String demanarRecomanacions(String email) {
+        try {
+            // 1. Validar Usuari (Expert)
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) {
+                throw new EmailNotRegisteredException();
+            }
+
+            // 2. Lògica de recomanació (simple)
+            // 2a. Trobar tots els gèneres que l'usuari ha jugat
+            List<Adquisicio> adquisicions = usuari.getAdquisicions();
+            if (adquisicions.isEmpty()) {
+                throw new NoRecomanacionsException(); // No podem recomanar si no ha jugat res
+            }
+
+            Set<String> generesPreferits = new HashSet<>();
+            for (Adquisicio adq : adquisicions) {
+                generesPreferits.addAll(adq.getJoc().getGeneres());
+            }
+
+            // 2b. Obtenir tots els jocs del catàleg
+            List<Joc> totsElsJocs = catalegJocs.getJocsOrdenatsPerNom(); // Reutilitzem el mètode
+
+            // 2c. Filtrar recomanacions
+            List<Joc> recomanacions = new ArrayList<>();
+            for (Joc joc : totsElsJocs) {
+                // No recomanar jocs no disponibles o ja adquirits
+                if (joc.getEstat() != EstatJoc.DISPONIBLE || usuari.teJoc(joc)) {
+                    continue;
+                }
+
+                // Comprovar si comparteix algun gènere
+                boolean teGenerePreferit = false;
+                for (String genere : joc.getGeneres()) {
+                    if (generesPreferits.contains(genere)) {
+                        teGenerePreferit = true;
+                        break;
+                    }
+                }
+
+                if (teGenerePreferit) {
+                    recomanacions.add(joc);
+                }
+            }
+
+            if (recomanacions.isEmpty()) {
+                throw new NoRecomanacionsException();
+            }
+
+            // 3. Preparar sortida (Creació Pura)
+            return PreparadorVista.prepararRecomanacions(recomanacions);
 
         } catch (Exception e) {
             return MessagesCAT.translate(e);

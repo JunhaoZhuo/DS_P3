@@ -54,4 +54,14 @@ public class PreparadorVista {
         return details.toString();
     }
 
+    /**
+     * Prepara el text per a una llista de recomanacions (US10)
+     */
+    public static String prepararRecomanacions(List<Joc> jocs) {
+        List<String> titols = jocs.stream()
+                .map(Joc::getTitol)
+                .collect(Collectors.toList());
+        return "Jocs recomanats per a tu:\n" + String.join("\n", titols);
+    }
+
 }

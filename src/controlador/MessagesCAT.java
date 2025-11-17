@@ -39,6 +39,9 @@ public enum MessagesCAT {
     // New messages for playing a game US 9
     UsuariNoTeJocPerJugarException("No pots jugar a un joc que no has adquirit"),
     SuccessfulSessio("Sessió de joc finalitzada correctament"),
+
+    // New messages for recommendations US 10
+    NoRecomanacionsException("No tenim recomanacions per a tu en aquest moment"),
     ;
 
 

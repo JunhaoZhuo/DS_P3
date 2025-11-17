@@ -3,22 +3,18 @@ Feature: Demanar recomanacions
   Vull rebre recomanacions personalitzades
   Per així descobrir més jocs que em puguin interessar
 
-  Scenario Outline: Éxit al demanar recomanacions amb compte registrat
-    Given usuari "<usuari>" registrat
-    When demano recomanacions
-    Then el sistema mostra una llista de jocs recomanats segons l'interès
+  @TA10.a
+  Scenario: Un usuari rep recomanacions basades en gèneres
+    Given els usuaris i les seves adquisicions es troben carregats de la base de dades
+    When l'usuari "marta.soler@example.com" demana recomanacions
+    Then el sistema mostra el missatge següent:
+      """
+      Jocs recomanats per a tu:
+      Elden Ring: Shadow of the Erdtree
+      """
 
-    Examples:
-      | usuari  |
-      | "Joan"  |
-      | "Anna"  |
-
-  Scenario Outline: Demanar recomanacions sense compte registrat
-    Given usuari "<usuari>" no registrat
-    When intento demanar recomanacions
-    Then el sistema mostrarà el missatge "Cal que et registris per rebre recomanacions"
-
-    Examples:
-      | usuari      |
-      | "Visitant1" |
-      | "Visitant2" |
+  @TA10.b
+  Scenario: Un usuari no registrat demana recomanacions
+    Given s'ha carregat el catàleg de la base de dades
+    When l'usuari "visitant@example.com" demana recomanacions
+    Then el sistema mostra el missatge "No existeix cap usuari amb aquest e-mail"
