@@ -51,5 +51,5 @@ Feature: Loguejar usuari
       | email                     | contrasenya     |
       | ajaleo@gmail.com          | Contrasenya1!   |
       | marta.soler@example.com   | Passw0rd!       |
-      | david.ros@example.net     | DavR0s#1         |
+      | david.ros@example.net     | DavR0s#1        |
 
