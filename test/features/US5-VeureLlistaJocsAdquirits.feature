@@ -11,7 +11,6 @@ Feature: Veure llista de jocs adquirits
     """
     Llista de jocs adquirits per l'usuari:
     Elden Ring: Shadow of the Erdtree
-    Grand Theft Auto VI
     Paragon
     """
 

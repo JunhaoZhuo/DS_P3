@@ -11,7 +11,6 @@ public class RelacioUsuariAdquisicioJocMockDAO extends RelacioMockDAO<Quintet<St
 
     public RelacioUsuariAdquisicioJocMockDAO() {
         addRelacio("ajaleo@gmail.com", "Elden Ring: Shadow of the Erdtree", "22-06-2024", "39.99", "EUR");
-        addRelacio("ajaleo@gmail.com", "Grand Theft Auto VI", "10-12-2023", "69.99", "EUR"); // preorder
         addRelacio("ajaleo@gmail.com", "Paragon", "20-04-2016", "0.00", "EUR"); // free-to-play past acquisition
 
         addRelacio("marta.soler@example.com", "Baldur's Gate 3", "15-08-2023", "59.99", "EUR");
