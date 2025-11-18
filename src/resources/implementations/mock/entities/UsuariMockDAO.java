@@ -16,7 +16,7 @@ public class UsuariMockDAO implements UsuariDAO {
         addUsuari("marta.soler@example.com", "Passw0rd!", "martas", "22-11-2024", "15-02-2023");
         addUsuari("joan93@example.org", "Secure123!", "joan93", "03-09-2023", "20-03-2024");
         addUsuari("lucia_perez@example.com", "Qwerty!9", "luciap", "10-07-2025", "05-04-2024");
-        addUsuari("david.ros@example.net", "DavR0s#1", "dros", "29-01-2024", "10-04-2025");
+        addUsuari("david.ros@example.net", "DavR0s#", "dros", "29-01-2024", "10-04-2025");
     }
 
     public Optional<Usuari> getById(String[] id) throws Exception {
@@ -59,19 +59,15 @@ public class UsuariMockDAO implements UsuariDAO {
             String dataRegistre
     ) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH);
-        try {
-            Usuari usuari = new Usuari(
-                    email,
-                    password,
-                    nomUsuari,
-                    dataNaixement,
-                    LocalDate.parse(dataRegistre, formatter)
-            );
-            usuaris.put(usuari.getEmail(), usuari);
-        } catch (Exception e) {
-            // Si les dades mock fallen, és un error de programació,
-            // per això llancem una RuntimeException.
-            throw new RuntimeException("Error al carregar dades mock d'usuari: " + e.getClass().getSimpleName(), e);
-        }
+
+        Usuari usuari = new Usuari(
+                email,
+                password,
+                nomUsuari,
+                LocalDate.parse(dataNaixement, formatter),
+                LocalDate.parse(dataRegistre, formatter)
+        );
+
+        usuaris.put(usuari.getEmail(), usuari);
     }
 }

@@ -22,20 +22,13 @@ public class Usuari {
             String email,
             String contrasenya,
             String nomUsuari,
-            String dataNaixement,
+            LocalDate dataNaixement,
             LocalDate dataRegistre
-    ) throws Exception {
-        // Comprovacions i processaments
-        comprovarCorreuEsValid(email);
-        comprovarContrasenyaEsValida(contrasenya);
-        comprovarNomUsuariEsValid(nomUsuari);
-        LocalDate dataNaixementProcessada = comprovarIProcessarData(dataNaixement);
-
-        // Assignacions
+    ) {
         this.email = email;
         this.contrasenya = contrasenya;
         this.nomUsuari = nomUsuari;
-        this.dataNaixement = dataNaixementProcessada;
+        this.dataNaixement = dataNaixement;
         this.dataRegistre = dataRegistre;
 
         this.adquisicions = new ArrayList<>();
@@ -81,52 +74,6 @@ public class Usuari {
             }
         }
         return null;
-    }
-    /*
-     * Metodes privats de comprovació i processament
-     */
-    /*
-    * CANVIS US1
-    * */
-    private void comprovarCorreuEsValid(String email) throws Exception {
-        if (email == null || email.isEmpty()) {
-            throw new EmptyEmailException();
-        } else if (!email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+\\.[A-Za-z]{2,}$")) {
-            throw new BadlyFormattedEmailException();
-        }
-    }
-
-    private void comprovarContrasenyaEsValida(String contrasenya) throws Exception {
-        if (contrasenya == null || contrasenya.isEmpty()) {
-            throw new EmptyPasswordException();
-        } else if (contrasenya.length() < 8) {
-            throw new PasswordHasLessThan8CharactersException();
-        } else if (!contrasenya.matches(".*[a-zA-Z].*")) {
-            throw new PasswordNeedsAtLeastOneLetterException();
-        } else if (!contrasenya.matches(".*\\d.*")) {
-            throw new PasswordNeedsAtLeastOneNumberException();
-        } else if (!contrasenya.matches(".*[^A-Za-z0-9].*")) { // Qualsevol caràcter que no sigui lletra o nombre
-            throw new PasswordNeedsAtLeastOneSymbolException();
-        }
-    }
-
-    private void comprovarNomUsuariEsValid(String nomUsuari) throws Exception {
-        if (nomUsuari == null || nomUsuari.isEmpty()) {
-            throw new EmptyUsernameException();
-        }
-    }
-
-    private LocalDate comprovarIProcessarData(String dataNaixement) throws Exception {
-        if (dataNaixement == null || dataNaixement.isEmpty()) {
-            throw new EmptyBirthdateException();
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH);
-        try {
-            return LocalDate.parse(dataNaixement, formatter);
-        } catch (DateTimeParseException e) {
-            throw new InvalidBirthdateFormatException();
-        }
     }
 
     // Util pel US7, pel comprovar si un usuari ja té adquirit un joc

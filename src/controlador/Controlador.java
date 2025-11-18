@@ -7,6 +7,7 @@ import model.excepcions.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.stream.Collectors;
 import vista.PreparadorVista;
@@ -42,19 +43,7 @@ public class Controlador {
             String dataNaixement
     ) {
         try {
-
-            comprovarEmailEstaDisponible(email);
-            comprovarNomUsuariEstaDisponible(nomUsuari);
-
-            Usuari nouUsuari = new Usuari(
-                    email,
-                    contrasenya,
-                    nomUsuari,
-                    dataNaixement,
-                    LocalDate.now()
-            );
-
-            carteraUsuaris.afegirUsuari(nouUsuari);
+            carteraUsuaris.registrarUsuari(email, contrasenya, nomUsuari, dataNaixement);
             return MessagesCAT.SuccessfulUserRegistration.getMessage();
         } catch (Exception e) {
             return MessagesCAT.translate(e);
@@ -113,24 +102,6 @@ public class Controlador {
         }
     }
 
-    /*
-     * Metodes privats de comprovació i processament.
-     */
-
-
-    private void comprovarEmailEstaDisponible(String email) throws Exception {
-        Usuari usuari = carteraUsuaris.findByEmail(email);
-        if (usuari != null) {
-            throw new EmailAlreadyRegisteredException();
-        }
-    }
-
-    private void comprovarNomUsuariEstaDisponible(String nomUsuari) throws Exception {
-        Usuari usuari = carteraUsuaris.findByNomUsuari(nomUsuari);
-        if (usuari != null) {
-            throw new UsernameAlreadyRegisteredException();
-        }
-    }
 
     // Getters per a tests US7
     public CatalegJocs getCatalegJocs() {
