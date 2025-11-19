@@ -17,6 +17,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+//noous imports per Revisio
+import resources.interfaces.relations.RelacioUsuariJocRevisioDAO;
+import utils.tuples.Trio;
+
 public class DataService implements IDataService  {
     private final UsuariDAO usuariDAO;
     private final JocDAO jocDAO;
@@ -25,6 +29,8 @@ public class DataService implements IDataService  {
     private final EspecAssolimentDAO especAssolimentDAO;
     private final RelacioSessioJocAssolimentJocEspecAssolimentJocDAO relacioSessionsJocAssolimentsJocEspecAssolimentsJoc;
 
+    // nou mètode per Revisio
+    private final RelacioUsuariJocRevisioDAO relacioUsuariJocRevisioDAO;
 //    private CarteraUsuaris carteraUsuaris;
 //    private CatalegJocs catalegJocs;
 
@@ -35,6 +41,9 @@ public class DataService implements IDataService  {
         relacioUsuariAdquisicioSessioJocDAO = factory.createRelacioUsuariSessioJocAdquisicioDAO();
         especAssolimentDAO = factory.createEspecAssolimentDAO();
         relacioSessionsJocAssolimentsJocEspecAssolimentsJoc = factory.createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO();
+
+        // inicialitzacio nou atribut, crerea l'objecte DAO de Revisio
+        relacioUsuariJocRevisioDAO = factory.createRelacioUsuariJocRevisioDAO();
     }
 
     public void loadDataInto(CarteraUsuaris cu, CatalegJocs cj) {
@@ -45,8 +54,32 @@ public class DataService implements IDataService  {
             relacionarUsuarisAdquisicionsSessionsJoc(cu); // Usuari -- Adquisicio -- SessioJoc
             initEspecAssoliments(cj);
             relacionarSessionsJocAssolimentsJocEspecAssolimentsJoc(cu, cj); // SessioJoc -- AssolimentJoc -- EspecAssolimentJoc
+
+            // NOVA CRIDA: Carregar revisions, cal implementar el metode
+            relacionarUsuarisJocsRevisions(cu);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+    // implementacio per la crida en loadDataInto
+    private void relacionarUsuarisJocsRevisions(CarteraUsuaris cu) throws Exception {
+        List<Trio<String, String, Revisio>> relacions = relacioUsuariJocRevisioDAO.getAll();
+
+        for (Trio<String, String, Revisio> r : relacions) {
+            String email = r.getElement1();
+            String titolJoc = r.getElement2();
+            Revisio revisio = r.getElement3();
+
+            // 1. Busquem l'usuari
+            Usuari usuari = cu.findByEmail(email);
+            if (usuari != null) {
+                // 2. Busquem l'adquisició d'aquest joc
+                Adquisicio adquisicio = usuari.findAdquisicioByTitol(titolJoc); // Mètode creat a la US8
+                if (adquisicio != null) {
+                    // 3. Assignem la revisió
+                    adquisicio.setRevisio(revisio);
+                }
+            }
         }
     }
 
