@@ -9,8 +9,8 @@ import resources.interfaces.entities.UsuariDAO;
 import resources.interfaces.relations.RelacioUsuariAdquisicioSessioJocDAO;
 
 
-// Nou mètode per crear el DAO de Revisions
-import resources.interfaces.relations.RelacioUsuariJocRevisioDAO;
+// Nou mètode per crear el DAO de Valoracio/Revisio
+import resources.interfaces.relations.RelacioUsuariJocValoracioDAO;
 public interface AbstractDAOFactory {
 
     /*
@@ -25,5 +25,5 @@ public interface AbstractDAOFactory {
     RelacioSessioJocAssolimentJocEspecAssolimentJocDAO createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO();
 
 
-    RelacioUsuariJocRevisioDAO createRelacioUsuariJocRevisioDAO();
+    RelacioUsuariJocValoracioDAO createRelacioUsuariJocValoracioDAO();
 }

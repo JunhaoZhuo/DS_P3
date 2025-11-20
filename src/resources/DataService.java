@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 //noous imports per Revisio
-import resources.interfaces.relations.RelacioUsuariJocRevisioDAO;
+import resources.interfaces.relations.RelacioUsuariJocValoracioDAO;
 import utils.tuples.Trio;
 
 public class DataService implements IDataService  {
@@ -30,7 +30,7 @@ public class DataService implements IDataService  {
     private final RelacioSessioJocAssolimentJocEspecAssolimentJocDAO relacioSessionsJocAssolimentsJocEspecAssolimentsJoc;
 
     // nou mètode per Revisio
-    private final RelacioUsuariJocRevisioDAO relacioUsuariJocRevisioDAO;
+    private final RelacioUsuariJocValoracioDAO relacioUsuariJocRevisioDAO;
 //    private CarteraUsuaris carteraUsuaris;
 //    private CatalegJocs catalegJocs;
 
@@ -43,7 +43,7 @@ public class DataService implements IDataService  {
         relacioSessionsJocAssolimentsJocEspecAssolimentsJoc = factory.createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO();
 
         // inicialitzacio nou atribut, crerea l'objecte DAO de Revisio
-        relacioUsuariJocRevisioDAO = factory.createRelacioUsuariJocRevisioDAO();
+        relacioUsuariJocRevisioDAO = factory.createRelacioUsuariJocValoracioDAO();
     }
 
     public void loadDataInto(CarteraUsuaris cu, CatalegJocs cj) {
@@ -63,12 +63,12 @@ public class DataService implements IDataService  {
     }
     // implementacio per la crida en loadDataInto
     private void relacionarUsuarisJocsRevisions(CarteraUsuaris cu) throws Exception {
-        List<Trio<String, String, Revisio>> relacions = relacioUsuariJocRevisioDAO.getAll();
+        List<Trio<String, String, Valoracio>> relacions = relacioUsuariJocRevisioDAO.getAll();
 
-        for (Trio<String, String, Revisio> r : relacions) {
+        for (Trio<String, String, Valoracio> r : relacions) {
             String email = r.getElement1();
             String titolJoc = r.getElement2();
-            Revisio revisio = r.getElement3();
+            Valoracio valoracio = r.getElement3();
 
             // 1. Busquem l'usuari
             Usuari usuari = cu.findByEmail(email);
@@ -77,7 +77,7 @@ public class DataService implements IDataService  {
                 Adquisicio adquisicio = usuari.findAdquisicioByTitol(titolJoc); // Mètode creat a la US8
                 if (adquisicio != null) {
                     // 3. Assignem la revisió
-                    adquisicio.setRevisio(revisio);
+                    adquisicio.setValoracio(valoracio);
                 }
             }
         }

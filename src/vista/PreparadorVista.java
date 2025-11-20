@@ -4,6 +4,8 @@ import model.Joc;
 import java.util.List;
 import java.util.stream.Collectors;
 import model.Adquisicio;
+import model.Valoracio;
+
 import java.time.format.DateTimeFormatter;
 
 public class PreparadorVista {
@@ -62,6 +64,28 @@ public class PreparadorVista {
                 .map(Joc::getTitol)
                 .collect(Collectors.toList());
         return "Jocs recomanats per a tu:\n" + String.join("\n", titols);
+    }
+
+    /**
+     * mètode per llistar valoracions. Gràcies al polimorfisme, serà molt net.
+     */
+    public static String prepararLlistaValoracions(List<Adquisicio> adquisicions) {
+        StringBuilder sb = new StringBuilder("Valoracions de l'usuari:\n");
+
+        for (Adquisicio adq : adquisicions) {
+            if (adq.teValoracio()) {
+                Valoracio val = adq.getValoracio();
+                // Polimorfisme en acció: getTipus() i getResum() funcionen diferent segons la classe
+                sb.append("- ")
+                        .append(adq.getJoc().getTitol())
+                        .append(": [")
+                        .append(val.getTipus())
+                        .append("] ")
+                        .append(val.getResum())
+                        .append("\n");
+            }
+        }
+        return sb.toString().trim(); // trim per treure l'últim salt de línia
     }
 
 }

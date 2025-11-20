@@ -93,6 +93,22 @@ public class Controlador {
         }
     }
 
+    // US11 valoracio crida de llistarValoracionsUsuari del paquet vista
+    public String llistarValoracionsUsuari(String email) {
+        try {
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) throw new EmailNotRegisteredException();
+
+            List<Adquisicio> adquisicions = usuari.getAdquisicions();
+
+            // Deleguem al preparador
+            return PreparadorVista.prepararLlistaValoracions(adquisicions);
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
+
     public String veureDetallsJoc(String titol) {
         try {
             Joc joc = catalegJocs.findByTitol(titol);
@@ -182,8 +198,9 @@ public class Controlador {
             );
 
             // 5. Assignar (Expert: Adquisicio) i determinar missatge
-            boolean eraNova = !adquisicio.teRevisio();
-            adquisicio.setRevisio(novaRevisio);
+            boolean eraNova = !adquisicio.teValoracio(); // abans teniem teRevisio()
+            adquisicio.setValoracio(novaRevisio); // abans setRevisio()
+            // Com que 'novaRevisio' és filla de 'Valoracio'
 
             if (eraNova) {
                 return MessagesCAT.SuccessfulRevisio.getMessage();
