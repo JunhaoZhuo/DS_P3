@@ -29,7 +29,9 @@ public class RelacioUsuariJocValoracioMockDAO extends RelacioMockDAO<Trio<String
         addValoracio(
                 "ajaleo@gmail.com",
                 "Paragon",
-                new Comentari("Joc molt divertit però tancat massa aviat", LocalDate.of(2018, 4, 20))
+                new Comentari("Joc molt divertit però tancat massa aviat",
+                        LocalDate.of(2018, 4, 20),
+                        "ajaleo@gmail.com")
         );
     }
 

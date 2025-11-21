@@ -12,10 +12,12 @@ public class Joc {
     private final LocalDate dataLlancament;
     private final LocalDate dataAnunci;
     private final LocalDate dataRetirada;
-
     private final List<EspecAssolimentJoc> especsAssoliment;
-
     private final EstatJoc estatJoc;
+
+    // Nou atribut per US12
+    private final List<Comentari> comentaris;
+
 
     public Joc(
         String titol,
@@ -37,6 +39,8 @@ public class Joc {
         this.estatJoc = estatJoc;
 
         this.especsAssoliment = new ArrayList<>();
+        // inicialitzem el nou atribut US12
+        this.comentaris = new ArrayList<>();
     }
 
     // TODO: getters & setters
@@ -79,6 +83,15 @@ public class Joc {
 
     public void afegirEspecAssolimentJoc(EspecAssolimentJoc especAssoliment) {
         especsAssoliment.add(especAssoliment);
+    }
+
+    // Nou mètode per US12
+    public void afegirComentari(Comentari comentari) {
+        this.comentaris.add(comentari);
+    }
+
+    public List<Comentari> getComentaris() {
+        return new ArrayList<>(comentaris); // Retornem còpia per encapsulament
     }
 
     public static Joc crearJocAnunciat(

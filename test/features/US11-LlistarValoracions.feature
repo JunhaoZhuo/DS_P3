@@ -12,5 +12,5 @@ Feature: Llistar valoracions
       """
       Valoracions de l'usuari:
       - Elden Ring: Shadow of the Erdtree: [Revisió] Nota mitjana: 9.25
-      - Paragon: [Comentari] Joc molt divertit però tancat massa aviat (2018-04-20)
+      - Paragon: [Comentari] Joc molt divertit però tancat massa aviat (2018-04-20) - per ajaleo@gmail.com
       """

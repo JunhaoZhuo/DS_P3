@@ -307,4 +307,31 @@ public class Controlador {
             return MessagesCAT.translate(e);
         }
     }
+
+    // US12 - Comentar Joc
+    // A src/controlador/Controlador.java
+
+    public String comentarJoc(String email, String titolJoc, String text) {
+        try {
+            // Validar Usuari
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) {
+                throw new EmailNotRegisteredException();
+            }
+
+            // Validar Joc: No comprovem l'estat perquè es pot comentar en qualsevol estat (US12)
+            Joc joc = catalegJocs.findByTitol(titolJoc);
+
+            // Crear Comentari (Creator)
+            Comentari nouComentari = new Comentari(text, LocalDate.now(), usuari.getEmail());
+
+            // Assignar al JOC (Canvi respecte US11: ara el joc té els comentaris)
+            joc.afegirComentari(nouComentari);
+
+            return "Comentari afegit correctament";
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import model.Adquisicio;
 import model.Valoracio;
+import model.Comentari;
 
 import java.time.format.DateTimeFormatter;
 
@@ -53,6 +54,15 @@ public class PreparadorVista {
                 .append("Data de llançament: ").append(dataLlancament).append("\n")
                 .append("Data de retirada: ").append(dataRetirada).append("\n")
                 .append("Estat: ").append(joc.getEstat());
+
+        // Actualitzem la visualització dels detalls del joc (US6) perquè inclogui els comentaris (US12).
+        List<Comentari> comentaris = joc.getComentaris();
+        if (!comentaris.isEmpty()) {
+            details.append("\n\nComentaris:");
+            for (Comentari c : comentaris) {
+                details.append("\n- ").append(c.getResum());
+            }
+        }
         return details.toString();
     }
 

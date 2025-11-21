@@ -1,0 +1,40 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Adquisicio
+class AssolimentJoc
+class CarteraUsuaris
+class CatalegJocs
+class Comentari
+class EspecAssolimentJoc
+enum EstatJoc << enumeration >>
+enum EstatSessioJoc << enumeration >>
+class Joc
+class Preu
+class Revisio
+class SessioJoc
+class Usuari
+class Valoracio
+class node6 as "package  model.excepcions" << package >>
+
+Adquisicio         "1" *-[#595959,plain]-> "joc\n1" Joc                
+Adquisicio         "1" *-[#595959,plain]-> "preu\n1" Preu               
+Adquisicio          -[#595959,dashed]->  Preu               : "«create»"
+Adquisicio         "1" *-[#595959,plain]-> "sessionsJoc\n*" SessioJoc          
+Adquisicio         "1" *-[#595959,plain]-> "valoracio\n1" Valoracio          
+AssolimentJoc      "1" *-[#595959,plain]-> "especAssolimentJoc\n1" EspecAssolimentJoc 
+CarteraUsuaris      -[#595959,dashed]->  Usuari             : "«create»"
+CarteraUsuaris     "1" *-[#595959,plain]-> "usuaris\n*" Usuari             
+CatalegJocs        "1" *-[#595959,plain]-> "jocs\n*" Joc                
+Comentari           -[#000082,plain]-^  Valoracio          
+Joc                "1" *-[#595959,plain]-> "comentaris\n*" Comentari          
+Joc                "1" *-[#595959,plain]-> "especsAssoliment\n*" EspecAssolimentJoc 
+Joc                "1" *-[#595959,plain]-> "estatJoc\n1" EstatJoc           
+Revisio             -[#000082,plain]-^  Valoracio          
+SessioJoc          "1" *-[#595959,plain]-> "assolimentsJoc\n*" AssolimentJoc      
+SessioJoc          "1" *-[#595959,plain]-> "estatSessioJoc\n1" EstatSessioJoc     
+Usuari             "1" *-[#595959,plain]-> "adquisicions\n*" Adquisicio         
+@enduml
