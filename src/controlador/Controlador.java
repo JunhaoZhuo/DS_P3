@@ -52,21 +52,18 @@ public class Controlador {
 
     public String loguejarUsuari(String email, String contrasenya) {
         try {
-            if (email == null || email.isEmpty()) {
-                throw new EmptyEmailException();
-            }
-            if (contrasenya == null || contrasenya.isEmpty()) {
-                throw new EmptyPasswordException();
-            }
+            // Cridem al servei d'autenticació
+            model.serveis.Autenticador autenticador = new model.serveis.Autenticador();
+            autenticador.validarCredencialsLogin(email, contrasenya);
 
+            // Validem que l'usuari existeixi
             Usuari usuari = carteraUsuaris.findByEmail(email);
             if (usuari == null) {
                 throw new EmailNotRegisteredException();
             }
+            // cridem a l'autenticador per verificar la contrasenya
+            autenticador.verificarContrasenya(usuari, contrasenya);
 
-            if (!usuari.comprovarContrasenya(contrasenya)) {
-                throw new IncorrectPasswordException();
-            }
             return MessagesCAT.SuccessfulLogin.getMessage();
         } catch (Exception e) {
             return MessagesCAT.translate(e);
