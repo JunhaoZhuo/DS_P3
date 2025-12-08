@@ -28,10 +28,10 @@ public class CatalegJocs {
 
     public EspecAssolimentJoc findEspecAssolimentByTitol(String titolAssoliment) {
         for (Joc joc : jocs) {
-            for (EspecAssolimentJoc ea : joc.getEspecAssoliments()) {
-                if (ea.getTitol().equals(titolAssoliment)) {
-                    return ea;
-                }
+            // Deleguem la responsabilitat al Joc (EXPERT)
+            EspecAssolimentJoc ea = joc.findEspecAssolimentByTitol(titolAssoliment);
+            if (ea != null) {
+                return ea;
             }
         }
         return null;

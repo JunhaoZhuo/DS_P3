@@ -81,6 +81,16 @@ public class Joc {
         especsAssoliment.add(especAssoliment);
     }
 
+    // el Joc és l'expert en buscar dins la seva llista
+    public EspecAssolimentJoc findEspecAssolimentByTitol(String titolAssoliment) {
+        for (EspecAssolimentJoc ea : especsAssoliment) {
+            if (ea.getTitol().equals(titolAssoliment)) {
+                return ea;
+            }
+        }
+        return null;
+    }
+
     public static Joc crearJocAnunciat(
             String titol,
             List<String> genere,
