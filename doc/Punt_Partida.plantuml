@@ -1,0 +1,521 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+interface AbstractDAOFactory << interface >> {
+  + createEspecAssolimentDAO(): EspecAssolimentDAO
+  + createRelacioUsuariJocRevisioDAO(): RelacioUsuariJocRevisioDAO
+  + createJocDAO(): JocDAO
+  + createUsuariDAO(): UsuariDAO
+  + createRelacioJocEspecAssolimentDAO(): RelacioJocEspecAssolimentDAO
+  + createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO(): RelacioSessioJocAssolimentJocEspecAssolimentJocDAO
+  + createRelacioUsuariAdquisicioJocDAO(): RelacioUsuariAdquisicioJocDAO
+  + createRelacioUsuariSessioJocAdquisicioDAO(): RelacioUsuariAdquisicioSessioJocDAO
+}
+class Adquisicio {
+  + Adquisicio(Joc, LocalDate, Preu): 
+  + getData(): LocalDate
+  + crearAdquisicio(Joc, LocalDate, Double, String): Adquisicio
+  + teRevisio(): boolean
+  + afegirSessioJoc(SessioJoc): void
+  + setRevisio(Revisio): void
+  + getJoc(): Joc
+  + getTitolJoc(): String
+  + findSessioJocByDataInici(LocalDateTime): SessioJoc
+}
+class AppContainer {
+  + AppContainer(): 
+}
+class AssolimentJoc {
+  + AssolimentJoc(EspecAssolimentJoc, LocalDateTime): 
+  + getEspecAssolimentJoc(): EspecAssolimentJoc
+  + getDataHora(): LocalDateTime
+}
+class Autenticador {
+  + Autenticador(): 
+  - comprovarCorreuEsValid(String): void
+  - comprovarContrasenyaEsValida(String): void
+  - comprovarIProcessarData(String): LocalDate
+  + validarCredencialsLogin(String, String): void
+  + validarDadesRegistre(String, String, String, String): LocalDate
+  + verificarContrasenya(Usuari, String): void
+}
+class BadlyFormattedEmailException {
+  + BadlyFormattedEmailException(): 
+}
+class CarteraUsuaris {
+  + CarteraUsuaris(): 
+  + registrarUsuari(String, String, String, String): void
+  - comprovarEmailEstaDisponible(String): void
+  + setUsuaris(List<Usuari>): void
+  + getAdquisicionsDeUsuariOrdenadesPerNom(String): List<Adquisicio>
+  + findByNomUsuari(String): Usuari
+  + findByEmail(String): Usuari
+  + afegirUsuari(Usuari): void
+  - comprovarNomUsuariEstaDisponible(String): void
+}
+class CatalegJocs {
+  + CatalegJocs(): 
+  + setJocs(List<Joc>): void
+  + findByTitol(String): Joc
+  + getJocsOrdenatsPerNom(): List<Joc>
+  + addJoc(Joc): void
+  + findEspecAssolimentByTitol(String): EspecAssolimentJoc
+}
+class CategoriesRevisioIncomplertesException {
+  + CategoriesRevisioIncomplertesException(): 
+}
+class ContrasenyaNoValidaException {
+  + ContrasenyaNoValidaException(): 
+}
+class Controlador {
+  + Controlador(IDataService): 
+  + visualitzarLlistaJocsCataleg(): String
+  + adquirirJoc(String, String): String
+  + veureDetallsJoc(String): String
+  + demanarRecomanacions(String): String
+  + loadDataFromResources(): void
+  + loadJocDataFromResources(): void
+  + revisarJoc(String, String, Map<String, Integer>): String
+  + jugarSessio(String, String): String
+  + loguejarUsuari(String, String): String
+  + registrarUsuari(String, String, String, String): String
+  + loadUsuariDataFromResources(): void
+  + visualitzarLlistaJocsAdquiritsPerUsuari(String): String
+  + getCatalegJocs(): CatalegJocs
+}
+interface DAO<T> << interface >> {
+  + add(T): boolean
+  + delete(T): boolean
+  + getAll(): List<T>
+}
+interface DAOEntity<T> << interface >> {
+  + getById(String[]): Optional<T>
+  + update(T): boolean
+}
+class DataService {
+  + DataService(AbstractDAOFactory): 
+  - relacionarUsuarisAdquisicionsJocs(CarteraUsuaris, CatalegJocs): void
+  - relacionarSessionsJocAssolimentsJocEspecAssolimentsJoc(CarteraUsuaris, CatalegJocs): void
+  + initCarteraUsuaris(CarteraUsuaris): void
+  + initCatalegJocs(CatalegJocs): void
+  - relacionarUsuarisAdquisicionsSessionsJoc(CarteraUsuaris): void
+  + loadJocsInto(CatalegJocs): void
+  - relacionarUsuarisJocsRevisions(CarteraUsuaris): void
+  + loadDataInto(CarteraUsuaris, CatalegJocs): void
+  - initEspecAssoliments(CatalegJocs): void
+  + loadUsuarisInto(CarteraUsuaris): void
+}
+class EmailAlreadyRegisteredException {
+  + EmailAlreadyRegisteredException(): 
+}
+class EmailNotRegisteredException {
+  + EmailNotRegisteredException(): 
+}
+class EmptyBirthdateException {
+  + EmptyBirthdateException(): 
+}
+class EmptyCatalegException {
+  + EmptyCatalegException(): 
+}
+class EmptyEmailException {
+  + EmptyEmailException(): 
+}
+class EmptyPasswordException {
+  + EmptyPasswordException(): 
+}
+class EmptyUsernameException {
+  + EmptyUsernameException(): 
+}
+interface EspecAssolimentDAO << interface >> {
+  + delete(EspecAssolimentJoc): boolean
+  + add(EspecAssolimentJoc): boolean
+  + getAll(): List<EspecAssolimentJoc>
+}
+class EspecAssolimentJoc {
+  + EspecAssolimentJoc(String, Double): 
+  + getTitol(): String
+  + getPercentatgeUsuarisCompletat(): Double
+}
+class EspecAssolimentMockDAO {
+  + EspecAssolimentMockDAO(): 
+  + getAll(): List<EspecAssolimentJoc>
+  + getById(String[]): Optional<EspecAssolimentJoc>
+  - addSpecAssoliment(String, Double): void
+  + update(EspecAssolimentJoc): boolean
+  + add(EspecAssolimentJoc): boolean
+  + delete(EspecAssolimentJoc): boolean
+}
+enum EstatJoc << enumeration >> {
+  + EstatJoc(): 
+  + valueOf(String): EstatJoc
+  + values(): EstatJoc[]
+}
+enum EstatSessioJoc << enumeration >> {
+  + EstatSessioJoc(): 
+  + values(): EstatSessioJoc[]
+  + valueOf(String): EstatSessioJoc
+}
+interface IDataService << interface >> {
+  + loadUsuarisInto(CarteraUsuaris): void
+  + loadDataInto(CarteraUsuaris, CatalegJocs): void
+  + loadJocsInto(CatalegJocs): void
+}
+class IncorrectPasswordException {
+  + IncorrectPasswordException(): 
+}
+class InvalidBirthdateFormatException {
+  + InvalidBirthdateFormatException(): 
+}
+class Joc {
+  + Joc(String, List<String>, List<String>, List<String>, LocalDate, LocalDate, LocalDate, EstatJoc): 
+  + getDistribuidores(): List<String>
+  + getDataRetirada(): LocalDate
+  + getDataLlancament(): LocalDate
+  + getEspecAssoliments(): List<EspecAssolimentJoc>
+  + getEstat(): EstatJoc
+  + findEspecAssolimentByTitol(String): EspecAssolimentJoc
+  + getDesenvolupadores(): List<String>
+  + getTitol(): String
+  + getDataAnunci(): LocalDate
+  + crearJocRetirat(String, List<String>, List<String>, List<String>, LocalDate, LocalDate, LocalDate): Joc
+  + crearJocAnunciat(String, List<String>, List<String>, List<String>, LocalDate): Joc
+  + crearJocDisponible(String, List<String>, List<String>, List<String>, LocalDate, LocalDate): Joc
+  + afegirEspecAssolimentJoc(EspecAssolimentJoc): void
+  + getGeneres(): List<String>
+}
+interface JocDAO << interface >> {
+  + getAll(): List<Joc>
+}
+class JocJaAdquiritException {
+  + JocJaAdquiritException(): 
+}
+class JocMockDAO {
+  + JocMockDAO(): 
+  + delete(Joc): boolean
+  - addJocAnunciat(String, String, String, String, String): void
+  + add(Joc): boolean
+  + getAll(): List<Joc>
+  - addJocDisponible(String, String, String, String, String, String): void
+  - addJocRetirat(String, String, String, String, String, String, String): void
+  + update(Joc): boolean
+  + getById(String[]): Optional<Joc>
+}
+class JocNoDisponibleException {
+  + JocNoDisponibleException(): 
+}
+class JocNotFoundException {
+  + JocNotFoundException(): 
+}
+enum MessagesCAT << enumeration >> {
+  - MessagesCAT(String): 
+  + translate(Exception): String
+  + valueOf(String): MessagesCAT
+  + getMessage(): String
+  + values(): MessagesCAT[]
+}
+class MockDAOFactory {
+  + MockDAOFactory(): 
+  + createEspecAssolimentDAO(): EspecAssolimentDAO
+  + createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO(): RelacioSessioJocAssolimentJocEspecAssolimentJocDAO
+  + createRelacioJocEspecAssolimentDAO(): RelacioJocEspecAssolimentDAO
+  + createJocDAO(): JocDAO
+  + createRelacioUsuariSessioJocAdquisicioDAO(): RelacioUsuariAdquisicioSessioJocDAO
+  + createRelacioUsuariAdquisicioJocDAO(): RelacioUsuariAdquisicioJocDAO
+  + createRelacioUsuariJocRevisioDAO(): RelacioUsuariJocRevisioDAO
+  + createUsuariDAO(): UsuariDAO
+}
+class NoRecomanacionsException {
+  + NoRecomanacionsException(): 
+}
+class Parell<T, V> {
+  + Parell(T, V): 
+  + setElement1(T): void
+  + hashCode(): int
+  + getElement1(): T
+  + setElement2(V): void
+  + equals(Object): boolean
+  + getElement2(): V
+}
+class PasswordHasLessThan8CharactersException {
+  + PasswordHasLessThan8CharactersException(): 
+}
+class PasswordNeedsAtLeastOneLetterException {
+  + PasswordNeedsAtLeastOneLetterException(): 
+}
+class PasswordNeedsAtLeastOneNumberException {
+  + PasswordNeedsAtLeastOneNumberException(): 
+}
+class PasswordNeedsAtLeastOneSymbolException {
+  + PasswordNeedsAtLeastOneSymbolException(): 
+}
+class PerfilUsuari {
+  + PerfilUsuari(String, String, String, LocalDate, LocalDate): 
+  + getDataRegistre(): LocalDate
+  + getNomUsuari(): String
+  + getDataNaixement(): LocalDate
+  + getEmail(): String
+  + getContrasenya(): String
+}
+class PreparadorVista {
+  + PreparadorVista(): 
+  + prepararDetallsJoc(Joc): String
+  + prepararLlistaAdquisicions(List<Adquisicio>): String
+  + prepararLlistaJocsCataleg(List<Joc>): String
+  + prepararRecomanacions(List<Joc>): String
+}
+class Preu {
+  + Preu(Double, String): 
+  + toString(): String
+}
+class PuntuacioIncorrectaException {
+  + PuntuacioIncorrectaException(): 
+}
+class Quartet<T, V, K, Z> {
+  + Quartet(T, V, K, Z): 
+  + getElement2(): V
+  + equals(Object): boolean
+  + getElement4(): Z
+  + getElement3(): K
+  + hashCode(): int
+  + getElement1(): T
+}
+class Quintet<T, U, V, W, X> {
+  + Quintet(T, U, V, W, X): 
+  + getElement3(): V
+  + hashCode(): int
+  + getElement1(): T
+  + getElement5(): X
+  + equals(Object): boolean
+  + getElement2(): U
+  + getElement4(): W
+}
+class Recomanador {
+  + Recomanador(): 
+  + recomanarJocs(Usuari, CatalegJocs): List<Joc>
+}
+class RegistreNoValidException {
+  + RegistreNoValidException(): 
+}
+interface RelacioJocEspecAssolimentDAO << interface >> {
+  + getAll(): List<Parell<String, String>>
+}
+class RelacioJocEspecAssolimentMockDAO {
+  + RelacioJocEspecAssolimentMockDAO(): 
+  - addRelacio(String, String): void
+}
+class RelacioMockDAO<T> {
+  + RelacioMockDAO(): 
+  + add(T): boolean
+  + getAll(): List<T>
+  + delete(T): boolean
+}
+interface RelacioSessioJocAssolimentJocEspecAssolimentJocDAO << interface >> {
+  + getAll(): List<Sextet<String, String, LocalDate, LocalDateTime, String, LocalDateTime>>
+}
+class RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO {
+  + RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO(): 
+  - addRelacio(String, String, String, String, String, String): void
+}
+interface RelacioUsuariAdquisicioJocDAO << interface >> {
+  + getAll(): List<Quintet<String, String, LocalDate, Double, String>>
+}
+class RelacioUsuariAdquisicioJocMockDAO {
+  + RelacioUsuariAdquisicioJocMockDAO(): 
+  - addRelacio(String, String, String, String, String): void
+}
+interface RelacioUsuariAdquisicioSessioJocDAO << interface >> {
+  + getAll(): List<Sextet<String, String, LocalDate, LocalDateTime, LocalDateTime, Integer>>
+}
+class RelacioUsuariAdquisicioSessioJocMockDAO {
+  + RelacioUsuariAdquisicioSessioJocMockDAO(): 
+  - addRelacio(String, String, String, String, String, Integer): void
+}
+interface RelacioUsuariJocRevisioDAO << interface >> {
+  + getAll(): List<Trio<String, String, Revisio>>
+}
+class RelacioUsuariJocRevisioMockDAO {
+  + RelacioUsuariJocRevisioMockDAO(): 
+  - addRevisio(String, String, int, int, int, int): void
+}
+class Revisio {
+  + Revisio(int, int, int, int): 
+  + getValoracioMitjana(): double
+}
+class SessioJoc {
+  + SessioJoc(LocalDateTime, LocalDateTime, EstatSessioJoc): 
+  + afegirAssolimentJoc(AssolimentJoc): void
+  + crearSessioJocFinalitzada(String, Joc, LocalDateTime, LocalDateTime): SessioJoc
+  + getDurada(): Time
+  + getDataInici(): LocalDateTime
+  + crearSessioJocActiva(String, Joc, LocalDateTime): SessioJoc
+}
+class Sextet<T, U, V, W, X, Y> {
+  + Sextet(T, U, V, W, X, Y): 
+  + getElement2(): U
+  + hashCode(): int
+  + getElement1(): T
+  + getElement5(): X
+  + getElement6(): Y
+  + getElement3(): V
+  + getElement4(): W
+  + equals(Object): boolean
+}
+class Trio<T, V, K> {
+  + Trio(T, V, K): 
+  + equals(Object): boolean
+  + getElement3(): K
+  + getElement2(): V
+  + hashCode(): int
+  + getElement1(): T
+}
+class UsernameAlreadyRegisteredException {
+  + UsernameAlreadyRegisteredException(): 
+}
+class Usuari {
+  + Usuari(String, String, String, LocalDate, LocalDate): 
+  + getEmail(): String
+  + findAdquisicioByTitol(String): Adquisicio
+  + addAdquisicio(Adquisicio): void
+  + comprovarContrasenya(String): boolean
+  + getContrasenya(): String
+  + getAdquisicions(): List<Adquisicio>
+  + findByTitolJocIDataAdquisicio(String, LocalDate): Adquisicio
+  + getNomUsuari(): String
+  + teJoc(Joc): boolean
+}
+interface UsuariDAO << interface >> {
+  + getAll(): List<Usuari>
+}
+class UsuariMockDAO {
+  + UsuariMockDAO(): 
+  - addUsuari(String, String, String, String, String): void
+  + getAll(): List<Usuari>
+  + delete(Usuari): boolean
+  + update(Usuari): boolean
+  + add(Usuari): boolean
+  + getById(String[]): Optional<Usuari>
+}
+class UsuariNoTeJocException {
+  + UsuariNoTeJocException(): 
+}
+class UsuariNoTeJocPerJugarException {
+  + UsuariNoTeJocPerJugarException(): 
+}
+class UsuariSenseAdquisicionsException {
+  + UsuariSenseAdquisicionsException(): 
+}
+
+Adquisicio                                             "1" *-[#595959,plain]-> "joc\n1" Joc                                                    
+Adquisicio                                              -[#595959,dashed]->  Preu                                                   : "«create»"
+Adquisicio                                             "1" *-[#595959,plain]-> "preu\n1" Preu                                                   
+Adquisicio                                             "1" *-[#595959,plain]-> "revisio\n1" Revisio                                                
+Adquisicio                                             "1" *-[#595959,plain]-> "sessionsJoc\n*" SessioJoc                                              
+AppContainer                                            -[#595959,dashed]->  Controlador                                            : "«create»"
+AppContainer                                           "1" *-[#595959,plain]-> "controlador\n1" Controlador                                            
+AppContainer                                            -[#595959,dashed]->  DataService                                            : "«create»"
+AppContainer                                           "1" *-[#595959,plain]-> "dataService\n1" IDataService                                           
+AppContainer                                           "1" *-[#595959,plain]-> "factory\n1" MockDAOFactory                                         
+AppContainer                                            -[#595959,dashed]->  MockDAOFactory                                         : "«create»"
+AssolimentJoc                                          "1" *-[#595959,plain]-> "especAssolimentJoc\n1" EspecAssolimentJoc                                     
+Autenticador                                            -[#595959,dashed]->  BadlyFormattedEmailException                           : "«create»"
+Autenticador                                            -[#595959,dashed]->  EmptyBirthdateException                                : "«create»"
+Autenticador                                            -[#595959,dashed]->  EmptyEmailException                                    : "«create»"
+Autenticador                                            -[#595959,dashed]->  EmptyPasswordException                                 : "«create»"
+Autenticador                                            -[#595959,dashed]->  EmptyUsernameException                                 : "«create»"
+Autenticador                                            -[#595959,dashed]->  IncorrectPasswordException                             : "«create»"
+Autenticador                                            -[#595959,dashed]->  InvalidBirthdateFormatException                        : "«create»"
+Autenticador                                            -[#595959,dashed]->  PasswordHasLessThan8CharactersException                : "«create»"
+Autenticador                                            -[#595959,dashed]->  PasswordNeedsAtLeastOneLetterException                 : "«create»"
+Autenticador                                            -[#595959,dashed]->  PasswordNeedsAtLeastOneNumberException                 : "«create»"
+Autenticador                                            -[#595959,dashed]->  PasswordNeedsAtLeastOneSymbolException                 : "«create»"
+CarteraUsuaris                                          -[#595959,dashed]->  Autenticador                                           : "«create»"
+CarteraUsuaris                                          -[#595959,dashed]->  EmailAlreadyRegisteredException                        : "«create»"
+CarteraUsuaris                                          -[#595959,dashed]->  EmailNotRegisteredException                            : "«create»"
+CarteraUsuaris                                          -[#595959,dashed]->  UsernameAlreadyRegisteredException                     : "«create»"
+CarteraUsuaris                                          -[#595959,dashed]->  Usuari                                                 : "«create»"
+CarteraUsuaris                                         "1" *-[#595959,plain]-> "usuaris\n*" Usuari                                                 
+CarteraUsuaris                                          -[#595959,dashed]->  UsuariSenseAdquisicionsException                       : "«create»"
+CatalegJocs                                             -[#595959,dashed]->  EmptyCatalegException                                  : "«create»"
+CatalegJocs                                            "1" *-[#595959,plain]-> "jocs\n*" Joc                                                    
+CatalegJocs                                             -[#595959,dashed]->  JocNotFoundException                                   : "«create»"
+Controlador                                             -[#595959,dashed]->  Autenticador                                           : "«create»"
+Controlador                                             -[#595959,dashed]->  CarteraUsuaris                                         : "«create»"
+Controlador                                            "1" *-[#595959,plain]-> "carteraUsuaris\n1" CarteraUsuaris                                         
+Controlador                                             -[#595959,dashed]->  CatalegJocs                                            : "«create»"
+Controlador                                            "1" *-[#595959,plain]-> "catalegJocs\n1" CatalegJocs                                            
+Controlador                                             -[#595959,dashed]->  CategoriesRevisioIncomplertesException                 : "«create»"
+Controlador                                             -[#595959,dashed]->  EmailNotRegisteredException                            : "«create»"
+Controlador                                            "1" *-[#595959,plain]-> "dataService\n1" IDataService                                           
+Controlador                                             -[#595959,dashed]->  JocJaAdquiritException                                 : "«create»"
+Controlador                                             -[#595959,dashed]->  JocNoDisponibleException                               : "«create»"
+Controlador                                             -[#595959,dashed]->  PuntuacioIncorrectaException                           : "«create»"
+Controlador                                             -[#595959,dashed]->  Recomanador                                            : "«create»"
+Controlador                                             -[#595959,dashed]->  Revisio                                                : "«create»"
+Controlador                                             -[#595959,dashed]->  UsuariNoTeJocException                                 : "«create»"
+Controlador                                             -[#595959,dashed]->  UsuariNoTeJocPerJugarException                         : "«create»"
+DAOEntity                                               -[#008200,plain]-^  DAO                                                    
+DataService                                             -[#595959,dashed]->  AssolimentJoc                                          : "«create»"
+DataService                                            "1" *-[#595959,plain]-> "especAssolimentDAO\n1" EspecAssolimentDAO                                     
+DataService                                             -[#008200,dashed]-^  IDataService                                           
+DataService                                            "1" *-[#595959,plain]-> "jocDAO\n1" JocDAO                                                 
+DataService                                            "1" *-[#595959,plain]-> "relacioJocEspecAssolimentDAO\n1" RelacioJocEspecAssolimentDAO                           
+DataService                                            "1" *-[#595959,plain]-> "relacioSessionsJocAssolimentsJocEspecAssolimentsJoc\n1" RelacioSessioJocAssolimentJocEspecAssolimentJocDAO     
+DataService                                            "1" *-[#595959,plain]-> "relacioUsuariAdquisicioJocDAO\n1" RelacioUsuariAdquisicioJocDAO                          
+DataService                                            "1" *-[#595959,plain]-> "relacioUsuariAdquisicioSessioJocDAO\n1" RelacioUsuariAdquisicioSessioJocDAO                    
+DataService                                            "1" *-[#595959,plain]-> "relacioUsuariJocRevisioDAO\n1" RelacioUsuariJocRevisioDAO                             
+DataService                                             -[#595959,dashed]->  SessioJoc                                              : "«create»"
+DataService                                            "1" *-[#595959,plain]-> "usuariDAO\n1" UsuariDAO                                              
+EspecAssolimentDAO                                      -[#008200,plain]-^  DAOEntity                                              
+EspecAssolimentMockDAO                                  -[#008200,dashed]-^  EspecAssolimentDAO                                     
+EspecAssolimentMockDAO                                 "1" *-[#595959,plain]-> "specAssoliments\n*" EspecAssolimentJoc                                     
+EspecAssolimentMockDAO                                  -[#595959,dashed]->  EspecAssolimentJoc                                     : "«create»"
+Joc                                                    "1" *-[#595959,plain]-> "especsAssoliment\n*" EspecAssolimentJoc                                     
+Joc                                                    "1" *-[#595959,plain]-> "estatJoc\n1" EstatJoc                                               
+JocDAO                                                  -[#008200,plain]-^  DAOEntity                                              
+JocMockDAO                                             "1" *-[#595959,plain]-> "jocs\n*" Joc                                                    
+JocMockDAO                                              -[#008200,dashed]-^  JocDAO                                                 
+MockDAOFactory                                          -[#008200,dashed]-^  AbstractDAOFactory                                     
+MockDAOFactory                                          -[#595959,dashed]->  EspecAssolimentMockDAO                                 : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  JocMockDAO                                             : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioJocEspecAssolimentMockDAO                       : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioUsuariAdquisicioJocMockDAO                      : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioUsuariAdquisicioSessioJocMockDAO                : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  RelacioUsuariJocRevisioMockDAO                         : "«create»"
+MockDAOFactory                                          -[#595959,dashed]->  UsuariMockDAO                                          : "«create»"
+Recomanador                                             -[#595959,dashed]->  NoRecomanacionsException                               : "«create»"
+RelacioJocEspecAssolimentDAO                            -[#008200,plain]-^  DAO                                                    
+RelacioJocEspecAssolimentMockDAO                        -[#595959,dashed]->  Parell                                                 : "«create»"
+RelacioJocEspecAssolimentMockDAO                        -[#008200,dashed]-^  RelacioJocEspecAssolimentDAO                           
+RelacioJocEspecAssolimentMockDAO                        -[#000082,plain]-^  RelacioMockDAO                                         
+RelacioMockDAO                                          -[#008200,dashed]-^  DAO                                                    
+RelacioSessioJocAssolimentJocEspecAssolimentJocDAO      -[#008200,plain]-^  DAO                                                    
+RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO  -[#000082,plain]-^  RelacioMockDAO                                         
+RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO  -[#008200,dashed]-^  RelacioSessioJocAssolimentJocEspecAssolimentJocDAO     
+RelacioSessioJocAssolimentJocEspecAssolimentJocMockDAO  -[#595959,dashed]->  Sextet                                                 : "«create»"
+RelacioUsuariAdquisicioJocDAO                           -[#008200,plain]-^  DAO                                                    
+RelacioUsuariAdquisicioJocMockDAO                       -[#595959,dashed]->  Quintet                                                : "«create»"
+RelacioUsuariAdquisicioJocMockDAO                       -[#000082,plain]-^  RelacioMockDAO                                         
+RelacioUsuariAdquisicioJocMockDAO                       -[#008200,dashed]-^  RelacioUsuariAdquisicioJocDAO                          
+RelacioUsuariAdquisicioSessioJocDAO                     -[#008200,plain]-^  DAO                                                    
+RelacioUsuariAdquisicioSessioJocMockDAO                 -[#000082,plain]-^  RelacioMockDAO                                         
+RelacioUsuariAdquisicioSessioJocMockDAO                 -[#008200,dashed]-^  RelacioUsuariAdquisicioSessioJocDAO                    
+RelacioUsuariAdquisicioSessioJocMockDAO                 -[#595959,dashed]->  Sextet                                                 : "«create»"
+RelacioUsuariJocRevisioDAO                              -[#008200,plain]-^  DAO                                                    
+RelacioUsuariJocRevisioMockDAO                          -[#000082,plain]-^  RelacioMockDAO                                         
+RelacioUsuariJocRevisioMockDAO                          -[#008200,dashed]-^  RelacioUsuariJocRevisioDAO                             
+RelacioUsuariJocRevisioMockDAO                          -[#595959,dashed]->  Revisio                                                : "«create»"
+RelacioUsuariJocRevisioMockDAO                          -[#595959,dashed]->  Trio                                                   : "«create»"
+SessioJoc                                              "1" *-[#595959,plain]-> "assolimentsJoc\n*" AssolimentJoc                                          
+SessioJoc                                              "1" *-[#595959,plain]-> "estatSessioJoc\n1" EstatSessioJoc                                         
+Usuari                                                 "1" *-[#595959,plain]-> "adquisicions\n*" Adquisicio                                             
+Usuari                                                  -[#595959,dashed]->  PerfilUsuari                                           : "«create»"
+Usuari                                                 "1" *-[#595959,plain]-> "perfil\n1" PerfilUsuari                                           
+UsuariDAO                                               -[#008200,plain]-^  DAOEntity                                              
+UsuariMockDAO                                          "1" *-[#595959,plain]-> "usuaris\n*" Usuari                                                 
+UsuariMockDAO                                           -[#595959,dashed]->  Usuari                                                 : "«create»"
+UsuariMockDAO                                           -[#008200,dashed]-^  UsuariDAO                                              
+@enduml
