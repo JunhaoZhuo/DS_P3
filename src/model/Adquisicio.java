@@ -12,7 +12,7 @@ public class Adquisicio {
 
     private Time tempsJugat; // derivat
     private List<SessioJoc> sessionsJoc;
-    private Revisio revisio;
+    private Valoracio valoracio;
 
     public Adquisicio(Joc joc, LocalDate data, Preu preu) {
         this.joc = joc;
@@ -57,11 +57,15 @@ public class Adquisicio {
         }
         return null;
     }
-    // US8 - Revisar joc
-    public boolean teRevisio() {
-        return this.revisio != null;
+    // abans: US8 - Revisar joc // ARA: US11 - Valorar joc
+    public boolean teValoracio() {
+        return this.valoracio != null;
     }
-    public void setRevisio(Revisio revisio) {
-        this.revisio = revisio;
+
+    public void setValoracio(Valoracio valoracio) {
+        this.valoracio = valoracio;
+    }
+    public Valoracio getValoracio() {
+        return valoracio;
     }
 }

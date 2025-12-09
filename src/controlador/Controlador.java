@@ -88,6 +88,22 @@ public class Controlador {
         }
     }
 
+    // US11 valoracio crida de llistarValoracionsUsuari del paquet vista
+    public String llistarValoracionsUsuari(String email) {
+        try {
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) throw new EmailNotRegisteredException();
+
+            List<Adquisicio> adquisicions = usuari.getAdquisicions();
+
+            // Deleguem al preparador
+            return PreparadorVista.prepararLlistaValoracions(adquisicions);
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
+
     public String veureDetallsJoc(String titol) {
         try {
             Joc joc = catalegJocs.findByTitol(titol);
@@ -177,8 +193,9 @@ public class Controlador {
             );
 
             // 5. Assignar (Expert: Adquisicio) i determinar missatge
-            boolean eraNova = !adquisicio.teRevisio();
-            adquisicio.setRevisio(novaRevisio);
+            boolean eraNova = !adquisicio.teValoracio(); // abans teniem teRevisio()
+            adquisicio.setValoracio(novaRevisio); // abans setRevisio()
+            // Com que 'novaRevisio' és filla de 'Valoracio'
 
             if (eraNova) {
                 return MessagesCAT.SuccessfulRevisio.getMessage();
@@ -244,6 +261,33 @@ public class Controlador {
 
             // Preparar sortida (Vista)
             return PreparadorVista.prepararRecomanacions(recomanacions);
+
+        } catch (Exception e) {
+            return MessagesCAT.translate(e);
+        }
+    }
+
+    // US12 - Comentar Joc
+    // A src/controlador/Controlador.java
+
+    public String comentarJoc(String email, String titolJoc, String text) {
+        try {
+            // Validar Usuari
+            Usuari usuari = carteraUsuaris.findByEmail(email);
+            if (usuari == null) {
+                throw new EmailNotRegisteredException();
+            }
+
+            // Validar Joc: No comprovem l'estat perquè es pot comentar en qualsevol estat (US12)
+            Joc joc = catalegJocs.findByTitol(titolJoc);
+
+            // Crear Comentari (Creator)
+            Comentari nouComentari = new Comentari(text, LocalDate.now(), usuari.getEmail());
+
+            // Assignar al JOC (Canvi respecte US11: ara el joc té els comentaris)
+            joc.afegirComentari(nouComentari);
+
+            return "Comentari afegit correctament";
 
         } catch (Exception e) {
             return MessagesCAT.translate(e);

@@ -4,6 +4,9 @@ import model.Joc;
 import java.util.List;
 import java.util.stream.Collectors;
 import model.Adquisicio;
+import model.Valoracio;
+import model.Comentari;
+
 import java.time.format.DateTimeFormatter;
 
 public class PreparadorVista {
@@ -51,6 +54,15 @@ public class PreparadorVista {
                 .append("Data de llançament: ").append(dataLlancament).append("\n")
                 .append("Data de retirada: ").append(dataRetirada).append("\n")
                 .append("Estat: ").append(joc.getEstat());
+
+        // Actualitzem la visualització dels detalls del joc (US6) perquè inclogui els comentaris (US12).
+        List<Comentari> comentaris = joc.getComentaris();
+        if (!comentaris.isEmpty()) {
+            details.append("\n\nComentaris:");
+            for (Comentari c : comentaris) {
+                details.append("\n- ").append(c.getResum());
+            }
+        }
         return details.toString();
     }
 
@@ -62,6 +74,28 @@ public class PreparadorVista {
                 .map(Joc::getTitol)
                 .collect(Collectors.toList());
         return "Jocs recomanats per a tu:\n" + String.join("\n", titols);
+    }
+
+    /**
+     * mètode per llistar valoracions. Gràcies al polimorfisme, serà molt net.
+     */
+    public static String prepararLlistaValoracions(List<Adquisicio> adquisicions) {
+        StringBuilder sb = new StringBuilder("Valoracions de l'usuari:\n");
+
+        for (Adquisicio adq : adquisicions) {
+            if (adq.teValoracio()) {
+                Valoracio val = adq.getValoracio();
+                // Polimorfisme en acció: getTipus() i getResum() funcionen diferent segons la classe
+                sb.append("- ")
+                        .append(adq.getJoc().getTitol())
+                        .append(": [")
+                        .append(val.getTipus())
+                        .append("] ")
+                        .append(val.getResum())
+                        .append("\n");
+            }
+        }
+        return sb.toString().trim(); // trim per treure l'últim salt de línia
     }
 
 }

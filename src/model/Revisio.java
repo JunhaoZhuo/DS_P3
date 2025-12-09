@@ -1,6 +1,6 @@
 package model;
 
-public class Revisio {
+public class Revisio extends Valoracio {
     private final int jugabilitat;
     private final int grafics;
     private final int historia;
@@ -16,5 +16,14 @@ public class Revisio {
     // Podem afegir un mètode per calcular la mitjana si fos necessari
     public double getValoracioMitjana() {
         return (jugabilitat + grafics + historia + musica) / 4.0;
+    }
+    @Override
+    public String getTipus() {
+        return "Revisió";
+    }
+
+    @Override
+    public String getResum() {
+        return "Nota mitjana: " + getValoracioMitjana();
     }
 }
