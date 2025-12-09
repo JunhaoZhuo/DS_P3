@@ -10,11 +10,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Usuari {
-    private final String email;
-    private final String contrasenya;
-    private final String nomUsuari;
-    private final LocalDate dataNaixement;
-    private final LocalDate dataRegistre;
+    // ara fem servir composició amb PerfilUsuari
+    private final PerfilUsuari perfil;
 
     private List<Adquisicio> adquisicions;
 
@@ -25,34 +22,29 @@ public class Usuari {
             LocalDate dataNaixement,
             LocalDate dataRegistre
     ) {
-        this.email = email;
-        this.contrasenya = contrasenya;
-        this.nomUsuari = nomUsuari;
-        this.dataNaixement = dataNaixement;
-        this.dataRegistre = dataRegistre;
+        // Creem el perfil de l'usuari
+        this.perfil = new PerfilUsuari(email, contrasenya, nomUsuari, dataNaixement, dataRegistre);
 
         this.adquisicions = new ArrayList<>();
     }
 
     public String getEmail() {
-        return email;
+        return perfil.getEmail();
     }
 
-    public Object getContrasenya() {
-        return contrasenya;
+    public String getContrasenya() {
+        return perfil.getContrasenya();
     }
     public String getNomUsuari() {
-        return nomUsuari;
+        return perfil.getNomUsuari();
     }
 
-    /*
-    CANVIS US2
-     */
+   // Mètode per comprovar la contrasenya desde perfil
     public boolean comprovarContrasenya(String contrasenya) {
-        return this.contrasenya.equals(contrasenya);
+        return perfil.getContrasenya().equals(contrasenya);
     }
 
-
+    // mètodes antics de usuari per gestionar adquisicions
     public List<Adquisicio> getAdquisicions() {
         return adquisicions;
     }
