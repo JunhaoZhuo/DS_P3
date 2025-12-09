@@ -229,56 +229,20 @@ public class Controlador {
     }
 
     // US10 - Recomanacions
+
     public String demanarRecomanacions(String email) {
         try {
-            // 1. Validar Usuari (Expert)
+            // Validar Usuari (Expert: CarteraUsuaris)
             Usuari usuari = carteraUsuaris.findByEmail(email);
             if (usuari == null) {
                 throw new EmailNotRegisteredException();
             }
 
-            // 2. Lògica de recomanació (simple)
-            // 2a. Trobar tots els gèneres que l'usuari ha jugat
-            List<Adquisicio> adquisicions = usuari.getAdquisicions();
-            if (adquisicions.isEmpty()) {
-                throw new NoRecomanacionsException(); // No podem recomanar si no ha jugat res
-            }
+            // Lògica de recomanació (Delegació al Recomanador - Fabricació Pura)
+            Recomanador recomanador = new Recomanador();
+            List<Joc> recomanacions = recomanador.recomanarJocs(usuari, catalegJocs);
 
-            Set<String> generesPreferits = new HashSet<>();
-            for (Adquisicio adq : adquisicions) {
-                generesPreferits.addAll(adq.getJoc().getGeneres());
-            }
-
-            // 2b. Obtenir tots els jocs del catàleg
-            List<Joc> totsElsJocs = catalegJocs.getJocsOrdenatsPerNom(); // Reutilitzem el mètode
-
-            // 2c. Filtrar recomanacions
-            List<Joc> recomanacions = new ArrayList<>();
-            for (Joc joc : totsElsJocs) {
-                // No recomanar jocs no disponibles o ja adquirits
-                if (joc.getEstat() != EstatJoc.DISPONIBLE || usuari.teJoc(joc)) {
-                    continue;
-                }
-
-                // Comprovar si comparteix algun gènere
-                boolean teGenerePreferit = false;
-                for (String genere : joc.getGeneres()) {
-                    if (generesPreferits.contains(genere)) {
-                        teGenerePreferit = true;
-                        break;
-                    }
-                }
-
-                if (teGenerePreferit) {
-                    recomanacions.add(joc);
-                }
-            }
-
-            if (recomanacions.isEmpty()) {
-                throw new NoRecomanacionsException();
-            }
-
-            // 3. Preparar sortida (Creació Pura)
+            // Preparar sortida (Vista)
             return PreparadorVista.prepararRecomanacions(recomanacions);
 
         } catch (Exception e) {
