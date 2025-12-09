@@ -2,18 +2,19 @@ package model;
 
 public class EspecAssolimentJoc {
     private final String titol;
-    private final String titolJoc;
+    // Eliminem titolJoc
+    private final Double percentatgeUsuarisCompletat;
 
-    public EspecAssolimentJoc(String titol, String titolJoc, Double percentatgeUsuarisCompletat) {
+    public EspecAssolimentJoc(String titol, Double percentatgeUsuarisCompletat) {
         this.titol = titol;
-        this.titolJoc = titolJoc;
+        this.percentatgeUsuarisCompletat = percentatgeUsuarisCompletat;
     }
 
     public String getTitol() {
         return titol;
     }
 
-    public String getTitolJoc() {
-        return titolJoc;
+    public Double getPercentatgeUsuarisCompletat() {
+        return percentatgeUsuarisCompletat;
     }
 }

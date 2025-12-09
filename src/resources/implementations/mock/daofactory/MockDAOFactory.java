@@ -14,6 +14,9 @@ import resources.implementations.mock.entities.UsuariMockDAO;
 import resources.implementations.mock.relations.RelacioUsuariAdquisicioSessioJocMockDAO;
 import resources.interfaces.daofactory.AbstractDAOFactory;
 
+import resources.interfaces.relations.RelacioJocEspecAssolimentDAO;
+import resources.implementations.mock.relations.RelacioJocEspecAssolimentMockDAO;
+
 // nou import, revisio
 import resources.interfaces.relations.RelacioUsuariJocRevisioDAO;
 import resources.implementations.mock.relations.RelacioUsuariJocRevisioMockDAO;
@@ -43,5 +46,9 @@ public class MockDAOFactory implements AbstractDAOFactory {
     @Override
     public RelacioUsuariJocRevisioDAO createRelacioUsuariJocRevisioDAO() {
         return new RelacioUsuariJocRevisioMockDAO();
+    }
+    @Override
+    public RelacioJocEspecAssolimentDAO createRelacioJocEspecAssolimentDAO() {
+        return new RelacioJocEspecAssolimentMockDAO();
     }
 }

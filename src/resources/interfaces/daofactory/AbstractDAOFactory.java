@@ -8,6 +8,8 @@ import resources.interfaces.entities.JocDAO;
 import resources.interfaces.entities.UsuariDAO;
 import resources.interfaces.relations.RelacioUsuariAdquisicioSessioJocDAO;
 
+import resources.interfaces.relations.RelacioJocEspecAssolimentDAO;
+
 
 // Nou mètode per crear el DAO de Revisions
 import resources.interfaces.relations.RelacioUsuariJocRevisioDAO;
@@ -26,4 +28,6 @@ public interface AbstractDAOFactory {
 
 
     RelacioUsuariJocRevisioDAO createRelacioUsuariJocRevisioDAO();
+
+    RelacioJocEspecAssolimentDAO createRelacioJocEspecAssolimentDAO();
 }
