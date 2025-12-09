@@ -29,10 +29,14 @@ public class DataService implements IDataService  {
     private final EspecAssolimentDAO especAssolimentDAO;
     private final RelacioSessioJocAssolimentJocEspecAssolimentJocDAO relacioSessionsJocAssolimentsJocEspecAssolimentsJoc;
 
+
     // nou mètode per Revisio
     private final RelacioUsuariJocValoracioDAO relacioUsuariJocRevisioDAO;
 //    private CarteraUsuaris carteraUsuaris;
 //    private CatalegJocs catalegJocs;
+    // NOU DAO
+    private final resources.interfaces.relations.RelacioJocEspecAssolimentDAO relacioJocEspecAssolimentDAO;
+
 
     public DataService(AbstractDAOFactory factory) {
         usuariDAO = factory.createUsuariDAO();
@@ -43,7 +47,10 @@ public class DataService implements IDataService  {
         relacioSessionsJocAssolimentsJocEspecAssolimentsJoc = factory.createRelacioSessioJocAssolimentJocEspecAssolimentJocDAO();
 
         // inicialitzacio nou atribut, crerea l'objecte DAO de Revisio
-        relacioUsuariJocRevisioDAO = factory.createRelacioUsuariJocValoracioDAO();
+        relacioUsuariJocRevisioDAO = factory.createRelacioUsuariJocRevisioDAO();
+        // NOU DAO
+        relacioJocEspecAssolimentDAO = factory.createRelacioJocEspecAssolimentDAO();
+
     }
 
     public void loadDataInto(CarteraUsuaris cu, CatalegJocs cj) {
@@ -126,23 +133,33 @@ public class DataService implements IDataService  {
      * Assigna els assoliments específics als jocs del catàleg via EspecAssolimentDAO
      */
     private void initEspecAssoliments(CatalegJocs cj) {
-        // Obtenir tots els assoliments específics
-        List<EspecAssolimentJoc> especAssoliments = especAssolimentDAO.getAll();
-
-        // Assignar els assoliments específics als jocs corresponents
-        for (EspecAssolimentJoc ea : especAssoliments) {
-            try {
-                Joc joc = cj.findByTitol(ea.getTitolJoc());
-                if (joc != null) {
-                    joc.afegirEspecAssolimentJoc(ea);
-                }
-            } catch (JocNotFoundException e) {
-                throw new RuntimeException();
+        try {
+            // 1. Obtenim totes les definicions d'assoliments i les mapem per títol per accés ràpid
+            List<EspecAssolimentJoc> totsAssoliments = especAssolimentDAO.getAll();
+            java.util.Map<String, EspecAssolimentJoc> mapaAssoliments = new java.util.HashMap<>();
+            for (EspecAssolimentJoc ea : totsAssoliments) {
+                mapaAssoliments.put(ea.getTitol(), ea);
             }
 
+            // 2. Obtenim les relacions (Quin joc té quin assoliment)
+            List<utils.tuples.Parell<String, String>> relacions = relacioJocEspecAssolimentDAO.getAll();
+
+            // 3. Processem les relacions
+            for (utils.tuples.Parell<String, String> relacio : relacions) {
+                String titolJoc = relacio.getElement1();
+                String titolAssoliment = relacio.getElement2();
+
+                Joc joc = cj.findByTitol(titolJoc);
+                EspecAssolimentJoc ea = mapaAssoliments.get(titolAssoliment);
+
+                if (joc != null && ea != null) {
+                    joc.afegirEspecAssolimentJoc(ea);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error inicialitzant assoliments: " + e.getMessage());
         }
     }
-
     /*
      * Relaciona els usuaris amb les adquisicions i les adquisicions amb els jocs via RelacioUsuariAdquisicioJocDAO
      */

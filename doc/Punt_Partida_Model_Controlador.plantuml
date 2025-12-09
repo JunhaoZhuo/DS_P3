@@ -1,0 +1,51 @@
+@startuml
+
+!theme plain
+top to bottom direction
+skinparam linetype ortho
+
+class Adquisicio
+class AssolimentJoc
+class Autenticador
+class CarteraUsuaris
+class CatalegJocs
+class Controlador
+class EspecAssolimentJoc
+enum EstatJoc << enumeration >>
+enum EstatSessioJoc << enumeration >>
+class Joc
+enum MessagesCAT << enumeration >>
+class PerfilUsuari
+class Preu
+class Recomanador
+class Revisio
+class SessioJoc
+class Usuari
+class node5 as "package  controlador.interfaces" << package >>
+class node6 as "package  model.excepcions" << package >>
+
+Adquisicio         "1" *-[#595959,plain]-> "joc\n1" Joc                
+Adquisicio          -[#595959,dashed]->  Preu               : "«create»"
+Adquisicio         "1" *-[#595959,plain]-> "preu\n1" Preu               
+Adquisicio         "1" *-[#595959,plain]-> "revisio\n1" Revisio            
+Adquisicio         "1" *-[#595959,plain]-> "sessionsJoc\n*" SessioJoc          
+AssolimentJoc      "1" *-[#595959,plain]-> "especAssolimentJoc\n1" EspecAssolimentJoc 
+CarteraUsuaris      -[#595959,dashed]->  Autenticador       : "«create»"
+CarteraUsuaris     "1" *-[#595959,plain]-> "usuaris\n*" Usuari             
+CarteraUsuaris      -[#595959,dashed]->  Usuari             : "«create»"
+CatalegJocs        "1" *-[#595959,plain]-> "jocs\n*" Joc                
+Controlador         -[#595959,dashed]->  Autenticador       : "«create»"
+Controlador         -[#595959,dashed]->  CarteraUsuaris     : "«create»"
+Controlador        "1" *-[#595959,plain]-> "carteraUsuaris\n1" CarteraUsuaris     
+Controlador        "1" *-[#595959,plain]-> "catalegJocs\n1" CatalegJocs        
+Controlador         -[#595959,dashed]->  CatalegJocs        : "«create»"
+Controlador         -[#595959,dashed]->  Recomanador        : "«create»"
+Controlador         -[#595959,dashed]->  Revisio            : "«create»"
+Joc                "1" *-[#595959,plain]-> "especsAssoliment\n*" EspecAssolimentJoc 
+Joc                "1" *-[#595959,plain]-> "estatJoc\n1" EstatJoc           
+SessioJoc          "1" *-[#595959,plain]-> "assolimentsJoc\n*" AssolimentJoc      
+SessioJoc          "1" *-[#595959,plain]-> "estatSessioJoc\n1" EstatSessioJoc     
+Usuari             "1" *-[#595959,plain]-> "adquisicions\n*" Adquisicio         
+Usuari              -[#595959,dashed]->  PerfilUsuari       : "«create»"
+Usuari             "1" *-[#595959,plain]-> "perfil\n1" PerfilUsuari       
+@enduml
