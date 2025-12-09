@@ -1,6 +1,5 @@
-package model.serveis;
+package model;
 
-import model.Usuari;
 import model.excepcions.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

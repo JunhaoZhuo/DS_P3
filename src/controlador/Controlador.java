@@ -6,10 +6,8 @@ import model.excepcions.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.stream.Collectors;
+
 import vista.PreparadorVista;
 
 
@@ -53,7 +51,7 @@ public class Controlador {
     public String loguejarUsuari(String email, String contrasenya) {
         try {
             // Cridem al servei d'autenticació
-            model.serveis.Autenticador autenticador = new model.serveis.Autenticador();
+            Autenticador autenticador = new Autenticador();
             autenticador.validarCredencialsLogin(email, contrasenya);
 
             // Validem que l'usuari existeixi

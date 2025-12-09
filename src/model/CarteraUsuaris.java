@@ -3,11 +3,8 @@ package model;
 import model.excepcions.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class CarteraUsuaris {
     private final List<Usuari> usuaris;
@@ -59,7 +56,7 @@ public class CarteraUsuaris {
 
     public void registrarUsuari(String email, String contrasenya, String nomUsuari, String dataNaixement) throws Exception {
         // 1. Deleguem la validació de format a l'Autenticador
-        model.serveis.Autenticador autenticador = new model.serveis.Autenticador();
+        Autenticador autenticador = new Autenticador();
         LocalDate dataNaixementAux = autenticador.validarDadesRegistre(email, contrasenya, nomUsuari, dataNaixement);
 
         // Comprovacions de negoci (existència) es queden a CarteraUsuaris
